@@ -1,5 +1,8 @@
+//alis content view lang 
+
 import SwiftUI
 
+// MARK: Home Screen
 struct HomeView: View {
     var body: some View {
         ScrollView {
@@ -39,7 +42,7 @@ struct HomeView: View {
                     }
                 }
                 
-                // Recently Listen
+                // Recently Listen (mini cards only)
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Text("Recently Listen")
@@ -61,7 +64,7 @@ struct HomeView: View {
                     .padding(.horizontal)
                 }
                 
-                // News Live
+                // News Live (mini cards only)
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Text("News Live")
@@ -83,7 +86,7 @@ struct HomeView: View {
                     .padding(.horizontal)
                 }
             }
-            .padding(.bottom, 20)
+            .padding(.bottom, 140) // extra space for player + icons
         }
     }
 }
@@ -123,7 +126,6 @@ struct StationCardView: View {
     }
 }
 
-// Mini card (used for Recently Listen & News Live)
 struct MiniStationCard: View {
     var imageName: String
     var color: Color
@@ -141,4 +143,111 @@ struct MiniStationCard: View {
             )
             .cornerRadius(12)
     }
+}
+
+// MARK: Currently Playing Bar
+struct CurrentlyPlayingBar: View {
+    var body: some View {
+        HStack {
+            Rectangle()
+                .fill(Color.gray.opacity(0.3))
+                .frame(width: 50, height: 50)
+                .cornerRadius(😎
+                .overlay(Image(systemName: "music.note").foregroundColor(.black))
+            
+            VStack(alignment: .leading) {
+                Text("Now Playing: Wish 107.5")
+                    .font(.subheadline)
+                Text("Your music dreams come alive")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+            
+            Spacer()
+            
+            Button(action: {}) {
+                Image(systemName: "play.fill")
+                    .font(.title2)
+                    .foregroundColor(.blue)
+            }
+        }
+        .padding()
+        .background(Color.white.shadow(radius: 2))
+    }
+}
+
+// MARK: Custom Bottom Bar with Icons
+struct BottomNavBar: View {
+    @Binding var selectedTab: Int
+    
+    var body: some View {
+        HStack {
+            Spacer()
+            Button(action: { selectedTab = 0 }) {
+                VStack {
+                    Image(systemName: "house.fill")
+                    Text("Home")
+                        .font(.caption2)
+                }
+                .foregroundColor(selectedTab == 0 ? .blue : .gray)
+            }
+            Spacer()
+            Button(action: { selectedTab = 1 }) {
+                VStack {
+                    Image(systemName: "magnifyingglass")
+                    Text("Search")
+                        .font(.caption2)
+                }
+                .foregroundColor(selectedTab == 1 ? .blue : .gray)
+            }
+            Spacer()
+            Button(action: { selectedTab = 2 }) {
+                VStack {
+                    Image(systemName: "person.fill")
+                    Text("Profile")
+                        .font(.caption2)
+                }
+                .foregroundColor(selectedTab == 2 ? .blue : .gray)
+            }
+            Spacer()
+        }
+        .padding(.vertical, 😎
+        .background(Color.white.shadow(radius: 2))
+    }
+}
+
+// MARK: Main View
+struct MainTabView: View {
+    @State private var selectedTab = 0
+    
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            // Switch between screens
+            Group {
+                if selectedTab == 0 {
+                    HomeView()
+                } else if selectedTab == 1 {
+                    Text("Search Screen")
+                } else {
+                    Text("Profile Screen")
+                }
+            }
+            
+            VStack(spacing: 0) {
+                CurrentlyPlayingBar()
+                BottomNavBar(selectedTab: $selectedTab)
+            }
+        }
+    }
+}
+
+// MARK: Root
+struct ContentView: View {
+    var body: some View {
+        MainTabView()
+    }
+}
+
+#Preview {
+    ContentView()
 }
