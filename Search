@@ -1,0 +1,113 @@
+Search (home button only… it should also looks like the home, the playing radio should be the same as the home but not  scrollable so retain.
+
+import SwiftUI
+
+struct Station: Identifiable {
+    let id = UUID()
+    let name: String
+    let image: String
+}
+
+struct SearchView: View {
+    @State private var searchText = ""
+    
+    let stations = [
+        Station(name: "DZRM 612", image: "dzrm"),
+        Station(name: "Monster FM", image: "monster"),
+        Station(name: "Yes FM", image: "yesfm"),
+        Station(name: "Veritas 846", image: "veritas"),
+        Station(name: "Wish 107.5", image: "wish"),
+        Station(name: "Easy Rock", image: "easyrock")
+    ]
+    
+    var body: some View {
+        VStack {
+            // Header
+            HStack {
+                Text("Search")
+                    .font(.system(size: 28, weight: .bold))
+                Spacer()
+                Image(systemName: "person.circle")
+                    .resizable()
+                    .frame(width: 28, height: 28)
+            }
+            .padding(.horizontal)
+            .padding(.top, 10)
+            
+            // Search Bar
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                TextField("Search", text: $searchText)
+            }
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
+            .padding(.horizontal)
+            
+            // Station Grid
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                    ForEach(stations) { station in
+                        VStack {
+                            Image(station.image) // Add image assets in Assets.xcassets
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 150, height: 150)
+                                .cornerRadius(8)
+                        }
+                    }
+                }
+                .padding()
+            }
+            
+            Spacer()
+            
+            // Now Playing Bar
+            HStack {
+                Image("monster")
+                    .resizable()
+                    .frame(width: 40, height: 40)
+                    .cornerRadius(6)
+                
+                Text("Monster FM")
+                    .font(.headline)
+                
+                Spacer()
+                
+                Image(systemName: "speaker.wave.2.fill")
+                    .font(.system(size: 20))
+                    .padding(.trailing, 10)
+                
+                Image(systemName: "play.circle.fill")
+                    .font(.system(size: 32))
+            }
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(12)
+            .padding(.horizontal)
+            
+            // Bottom Navigation with Home Button
+            HStack {
+                Spacer()
+                Button(action: {
+                    // Navigate to Home
+                }) {
+                    Image(systemName: "house.fill")
+                        .font(.system(size: 24))
+                        .foregroundColor(.black)
+                }
+                Spacer()
+            }
+            .padding(.vertical, 8)
+            .background(Color.white)
+            .shadow(color: .gray.opacity(0.2), radius: 4, x: 0, y: -2)
+        }
+    }
+}
+
+struct SearchView_Previews: PreviewProvider {
+    static var previews: some View {
+        SearchView()
+    }
+}
