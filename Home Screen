@@ -1,0 +1,144 @@
+import SwiftUI
+
+struct HomeView: View {
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                
+                // Header
+                HStack {
+                    Text("Home")
+                        .font(.system(size: 28, weight: .bold))
+                    
+                    Spacer()
+                    
+                    Image(systemName: "person.circle")
+                        .resizable()
+                        .frame(width: 28, height: 28)
+                }
+                .padding(.horizontal)
+                .padding(.top, 10)
+                
+                // On Air Section
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("On Air")
+                        .font(.headline)
+                        .padding(.horizontal)
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16) {
+                            StationCardView(imageName: "rectangle.fill", title: "Wish 107.5", subtitle: "Your music dreams come alive", listeners: "12,480", color: .red)
+                            
+                            StationCardView(imageName: "heart.fill", title: "Love Radio", subtitle: "Feel the love everyday!", listeners: "8,320", color: .pink)
+                            
+                            StationCardView(imageName: "music.note", title: "Monster FM", subtitle: "Top hits, non-stop", listeners: "6,120", color: .blue)
+                            
+                            StationCardView(imageName: "antenna.radiowaves.left.and.right", title: "Yes FM", subtitle: "All hits all day", listeners: "4,500", color: .green)
+                        }
+                        .padding(.horizontal)
+                    }
+                }
+                
+                // Recently Listen
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("Recently Listen")
+                            .font(.headline)
+                        Spacer()
+                        Button(action: {}) {
+                            Text(">")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                        }
+                    }
+                    .padding(.horizontal)
+                    
+                    HStack(spacing: 16) {
+                        MiniStationCard(imageName: "music.note", color: .blue)
+                        MiniStationCard(imageName: "bolt.circle", color: .orange)
+                        MiniStationCard(imageName: "antenna.radiowaves.left.and.right", color: .purple)
+                    }
+                    .padding(.horizontal)
+                }
+                
+                // News Live
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("News Live")
+                            .font(.headline)
+                        Spacer()
+                        Button(action: {}) {
+                            Text(">")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                        }
+                    }
+                    .padding(.horizontal)
+                    
+                    HStack(spacing: 16) {
+                        MiniStationCard(imageName: "antenna.radiowaves.left.and.right", color: .red)
+                        MiniStationCard(imageName: "mic.fill", color: .green)
+                        MiniStationCard(imageName: "waveform.circle", color: .blue)
+                    }
+                    .padding(.horizontal)
+                }
+            }
+            .padding(.bottom, 20)
+        }
+    }
+}
+
+// MARK: Components
+struct StationCardView: View {
+    var imageName: String
+    var title: String
+    var subtitle: String
+    var listeners: String
+    var color: Color
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Rectangle()
+                .fill(color)
+                .frame(width: 160, height: 100)
+                .overlay(
+                    Image(systemName: imageName)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.white.opacity(0.8))
+                        .frame(width: 40, height: 40)
+                )
+                .cornerRadius(10)
+            
+            Text(title)
+                .font(.headline)
+            Text(subtitle)
+                .font(.caption)
+                .foregroundColor(.gray)
+            Text("Active Listeners: \(listeners)")
+                .font(.caption2)
+                .foregroundColor(.orange)
+        }
+        .frame(width: 160)
+    }
+}
+
+// Mini card (used for Recently Listen & News Live)
+struct MiniStationCard: View {
+    var imageName: String
+    var color: Color
+    
+    var body: some View {
+        Rectangle()
+            .fill(color)
+            .frame(width: 100, height: 100)
+            .overlay(
+                Image(systemName: imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.white.opacity(0.9))
+                    .frame(width: 40, height: 40)
+            )
+            .cornerRadius(12)
+    }
+}
