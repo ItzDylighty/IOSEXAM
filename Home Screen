@@ -5,88 +5,92 @@ import SwiftUI
 // MARK: Home Screen
 struct HomeView: View {
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+        VStack(spacing: 0) {
+            
+            // Fixed Header
+            HStack {
+                Text("Home")
+                    .font(.system(size: 28, weight: .bold))
                 
-                // Header
-                HStack {
-                    Text("Home")
-                        .font(.system(size: 28, weight: .bold))
-                    
-                    Spacer()
-                    
-                    Image(systemName: "person.circle")
-                        .resizable()
-                        .frame(width: 28, height: 28)
-                }
-                .padding(.horizontal)
-                .padding(.top, 10)
+                Spacer()
                 
-                // On Air Section
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("On Air")
-                        .font(.headline)
-                        .padding(.horizontal)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 16) {
-                            StationCardView(imageName: "rectangle.fill", title: "Wish 107.5", subtitle: "Your music dreams come alive", listeners: "12,480", color: .red)
-                            
-                            StationCardView(imageName: "heart.fill", title: "Love Radio", subtitle: "Feel the love everyday!", listeners: "8,320", color: .pink)
-                            
-                            StationCardView(imageName: "music.note", title: "Monster FM", subtitle: "Top hits, non-stop", listeners: "6,120", color: .blue)
-                            
-                            StationCardView(imageName: "antenna.radiowaves.left.and.right", title: "Yes FM", subtitle: "All hits all day", listeners: "4,500", color: .green)
-                        }
-                        .padding(.horizontal)
-                    }
-                }
-                
-                // Recently Listen (mini cards only)
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text("Recently Listen")
-                            .font(.headline)
-                        Spacer()
-                        Button(action: {}) {
-                            Text(">")
-                                .font(.headline)
-                                .foregroundColor(.black)
-                        }
-                    }
-                    .padding(.horizontal)
-                    
-                    HStack(spacing: 16) {
-                        MiniStationCard(imageName: "music.note", color: .blue)
-                        MiniStationCard(imageName: "bolt.circle", color: .orange)
-                        MiniStationCard(imageName: "antenna.radiowaves.left.and.right", color: .purple)
-                    }
-                    .padding(.horizontal)
-                }
-                
-                // News Live (mini cards only)
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text("News Live")
-                            .font(.headline)
-                        Spacer()
-                        Button(action: {}) {
-                            Text(">")
-                                .font(.headline)
-                                .foregroundColor(.black)
-                        }
-                    }
-                    .padding(.horizontal)
-                    
-                    HStack(spacing: 16) {
-                        MiniStationCard(imageName: "antenna.radiowaves.left.and.right", color: .red)
-                        MiniStationCard(imageName: "mic.fill", color: .green)
-                        MiniStationCard(imageName: "waveform.circle", color: .blue)
-                    }
-                    .padding(.horizontal)
-                }
+                Image(systemName: "person.circle")
+                    .resizable()
+                    .frame(width: 28, height: 28)
             }
-            .padding(.bottom, 140) // extra space for player + icons
+            .padding(.horizontal)
+            .padding(.top, 10)
+            
+            // Scrollable Content
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    
+                    // On Air Section
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("On Air")
+                            .font(.headline)
+                            .padding(.horizontal)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                StationCardView(imageName: "rectangle.fill", title: "Wish 107.5", subtitle: " dreams come alive", listeners: "12,480", color: .red)
+                                
+                                StationCardView(imageName: "heart.fill", title: "Love Radio", subtitle: "Feel the love everyday!", listeners: "8,320", color: .pink)
+                                
+                                StationCardView(imageName: "music.note", title: "Monster FM", subtitle: "Top hits, non-stop", listeners: "6,120", color: .blue)
+                                
+                                StationCardView(imageName: "antenna.radiowaves.left.and.right", title: "Yes FM", subtitle: "All hits all day", listeners: "4,500", color: .green)
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                    
+                    // Recently Listen
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Recently Listen")
+                                .font(.headline)
+                            Spacer()
+                            Button(action: {}) {
+                                Text(">")
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                            }
+                        }
+                        .padding(.horizontal)
+                        
+                        HStack(spacing: 16) {
+                            MiniStationCard(imageName: "music.note", color: .blue)
+                            MiniStationCard(imageName: "bolt.circle", color: .orange)
+                            MiniStationCard(imageName: "antenna.radiowaves.left.and.right", color: .purple)
+                        }
+                        .padding(.horizontal)
+                    }
+                    
+                    // News Live
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("News Live")
+                                .font(.headline)
+                            Spacer()
+                            Button(action: {}) {
+                                Text(">")
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                            }
+                        }
+                        .padding(.horizontal)
+                        
+                        HStack(spacing: 16) {
+                            MiniStationCard(imageName: "antenna.radiowaves.left.and.right", color: .red)
+                            MiniStationCard(imageName: "mic.fill", color: .green)
+                            MiniStationCard(imageName: "waveform.circle", color: .blue)
+                        }
+                        .padding(.horizontal)
+                    }
+                }
+                .padding(.bottom, 140) // space for bottom bar
+            }
         }
     }
 }
@@ -152,7 +156,7 @@ struct CurrentlyPlayingBar: View {
             Rectangle()
                 .fill(Color.gray.opacity(0.3))
                 .frame(width: 50, height: 50)
-                .cornerRadius(😎
+                .cornerRadius(8)
                 .overlay(Image(systemName: "music.note").foregroundColor(.black))
             
             VStack(alignment: .leading) {
@@ -176,7 +180,7 @@ struct CurrentlyPlayingBar: View {
     }
 }
 
-// MARK: Custom Bottom Bar with Icons
+// MARK: Bottom Navigation Bar
 struct BottomNavBar: View {
     @Binding var selectedTab: Int
     
@@ -211,7 +215,7 @@ struct BottomNavBar: View {
             }
             Spacer()
         }
-        .padding(.vertical, 😎
+        .padding(.vertical, 8)
         .background(Color.white.shadow(radius: 2))
     }
 }
@@ -222,7 +226,8 @@ struct MainTabView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            // Switch between screens
+            
+            // Screen Switching
             Group {
                 if selectedTab == 0 {
                     HomeView()
@@ -233,6 +238,7 @@ struct MainTabView: View {
                 }
             }
             
+            // Fixed Bottom Player + Navigation
             VStack(spacing: 0) {
                 CurrentlyPlayingBar()
                 BottomNavBar(selectedTab: $selectedTab)
