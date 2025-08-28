@@ -1,4 +1,6 @@
-//alis content view lang 
+/*alis content view lang
+Palit lang imageName sa panggalan ng imag
+*/
 
 import SwiftUI
 
