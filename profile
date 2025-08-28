@@ -24,8 +24,9 @@ struct ProfileView: View {
                 .padding(.horizontal)
                 .padding(.top, 10)
                 
+                // Scrollable Content
                 ScrollView {
-                    VStack(spacing: 20) {
+                    VStack(spacing: 24) { // Increased spacing
                         
                         // User Info
                         VStack(spacing: 8) {
@@ -69,7 +70,7 @@ struct ProfileView: View {
                         Divider()
                         
                         // Support Section
-                        VStack(alignment: .leading, spacing: 16) {
+                        VStack(alignment: .leading, spacing: 20) { // More spacing
                             Text("Support")
                                 .font(.headline)
                             
@@ -92,7 +93,7 @@ struct ProfileView: View {
                         Divider()
                         
                         // Preferences Section
-                        VStack(alignment: .leading, spacing: 16) {
+                        VStack(alignment: .leading, spacing: 20) { // More spacing
                             Text("Preferences")
                                 .font(.headline)
                             
@@ -114,22 +115,25 @@ struct ProfileView: View {
                         }
                         .padding(.horizontal)
                         
-                        Spacer(minLength: 40)
-                        
-                        // Logout Button
-                        Button(action: {}) {
-                            Text("Log out")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.black)
-                                .foregroundColor(.white)
-                                .cornerRadius(25)
-                                .padding(.horizontal)
-                        }
-                        .padding(.bottom, 20)
+                        Spacer(minLength: 80) // Space before logout bar
                     }
                 }
+            }
+            
+            // Fixed Logout Button at bottom
+            VStack {
+                Spacer()
+                Button(action: {}) {
+                    Text("Log out")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.black)
+                        .foregroundColor(.white)
+                        .cornerRadius(25)
+                        .padding(.horizontal)
+                }
+                .padding(.bottom, 20)
             }
         }
     }
