@@ -26,3 +26,21 @@ struct RadioAppApp: App {
 #Preview {
     MainTabView()
 }
+
+
+//for login 
+
+@main
+struct YourAppNameApp: App {
+    @State private var isLoggedIn = false
+    
+    var body: some Scene {
+        WindowGroup {
+            if isLoggedIn {
+                MainTabView()
+            } else {
+                LoginView(isLoggedIn: $isLoggedIn)
+            }
+        }
+    }
+}
