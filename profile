@@ -12,7 +12,6 @@ struct ProfileView: View {
                     Spacer()
                     
                     Button(action: {
-                        // Maybe later: open edit profile?
                     }) {
                         Text("Done")
                             .font(.system(size: 16, weight: .semibold))
