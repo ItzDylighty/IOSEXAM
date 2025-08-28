@@ -115,7 +115,7 @@ struct ProfileView: View {
                         }
                         .padding(.horizontal)
                         
-                        Spacer(minLength: 100)
+                        Spacer(minLength: 30)
                         
                         // Logout Button
                         Button(action: {}) {
@@ -128,7 +128,7 @@ struct ProfileView: View {
                                 .cornerRadius(25)
                                 .padding(.horizontal)
                         }
-                        .padding(.bottom, 20)
+                        .padding(.bottom, 150)
                     }
                 }
             }
