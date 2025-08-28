@@ -254,7 +254,7 @@ struct MainTabView: View {
     }
 }
 
-// MARK: Root App Entry (no ContentView anymore!)
+// MARK: Root App sa MainTabView
 @main
 struct YourAppNameApp: App {
     var body: some Scene {
