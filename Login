@@ -1,0 +1,158 @@
+Log in (not fit screen, home instead of search)
+
+import SwiftUI
+
+struct ContentView: View {
+    @State private var isLoggedIn = false
+
+    var body: some View {
+        if isLoggedIn {
+            SearchView() // Show home/search screen after login
+        } else {
+            LoginView(isLoggedIn: $isLoggedIn) // Show login first
+        }
+    }
+}
+
+// MARK: - Login View
+struct LoginView: View {
+    @Binding var isLoggedIn: Bool
+    @State private var username: String = ""
+    @State private var password: String = ""
+
+    var body: some View {
+        VStack(spacing: 20) {
+            
+            // Placeholder Logo
+            Image(systemName: "radio.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 120, height: 120)
+                .padding(.top, 50)
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(12)
+            
+            Text("Live Radio")
+                .font(.title)
+                .fontWeight(.bold)
+            
+            Text("CONNECT NOW!")
+                .font(.subheadline)
+                .foregroundColor(.gray)
+            
+            Spacer().frame(height: 30)
+            
+            // Username Field
+            TextField("Username", text: $username)
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+                .autocapitalization(.none)
+            
+            // Password Field
+            SecureField("Enter Password", text: $password)
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+            
+            // Login Button
+            Button(action: {
+                print("Login tapped")
+                isLoggedIn = true // Switch to SearchView
+            }) {
+                Text("Log in")
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.black)
+                    .cornerRadius(8)
+            }
+            
+            // Sign up link
+            HStack {
+                Text("Don't Have an account?")
+                    .foregroundColor(.gray)
+                Button(action: {
+                    print("Create account tapped")
+                }) {
+                    Text("Create Here")
+                        .foregroundColor(.blue)
+                }
+            }
+            .font(.footnote)
+            .padding(.top, 10)
+            
+            // Divider with "or"
+            HStack {
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(.gray.opacity(0.5))
+                Text("or")
+                    .foregroundColor(.gray)
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(.gray.opacity(0.5))
+            }
+            .padding(.vertical, 10)
+            
+            // Continue with Google
+            Button(action: {
+                print("Google tapped")
+            }) {
+                HStack {
+                    Image(systemName: "globe")
+                    Text("Continue with Google")
+                }
+                .foregroundColor(.black)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color(.systemGray5))
+                .cornerRadius(8)
+            }
+            
+            // Continue with Apple
+            Button(action: {
+                print("Apple tapped")
+            }) {
+                HStack {
+                    Image(systemName: "applelogo")
+                    Text("Continue with Apple")
+                }
+                .foregroundColor(.black)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color(.systemGray5))
+                .cornerRadius(8)
+            }
+            
+            Spacer()
+            
+            // Terms
+            Text("By clicking continue, you agree to our Terms of Service and Privacy Policy")
+                .font(.footnote)
+                .foregroundColor(.gray)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
+        }
+        .padding(.horizontal, 30)
+    }
+}
+
+// MARK: - Example Search View (Home Screen)
+struct SearchView: View {
+    var body: some View {
+        VStack {
+            Text("Search Page")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding()
+            
+            Spacer()
+        }
+    }
+}
+
+#Preview {
+    ContentView()
+}
