@@ -167,15 +167,18 @@ struct CurrentlyPlayingBar: View {
                 .fill(Color.gray.opacity(0.3))
                 .frame(width: 50, height: 50)
                 .cornerRadius(8)
-                .overlay(Image(systemName: "music.note").foregroundColor(.black))
+                .overlay(
+                    Image(systemName: "music.note")
+                        .foregroundColor(.primary)   
+                )
             
             VStack(alignment: .leading) {
                 Text("Now Playing: Wish 107.5")
                     .font(.subheadline)
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)     
                 Text("Your music dreams come alive")
                     .font(.caption)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.secondary)   
             }
             
             Spacer()
@@ -183,11 +186,11 @@ struct CurrentlyPlayingBar: View {
             Button(action: {}) {
                 Image(systemName: "play.fill")
                     .font(.title2)
-                    .foregroundColor(.blue)
+                    .foregroundColor(.blue) // keep accent blue
             }
         }
         .padding()
-        .background(Color.white.shadow(radius: 2))
+        .background(Color(.systemBackground).shadow(radius: 2)) 
     }
 }
 
@@ -204,7 +207,7 @@ struct BottomNavBar: View {
                     Text("Home")
                         .font(.caption2)
                 }
-                .foregroundColor(selectedTab == 0 ? .blue : .gray)
+                .foregroundColor(selectedTab == 0 ? .blue : .secondary) 
             }
             Spacer()
             Button(action: { selectedTab = 1 }) {
@@ -213,7 +216,7 @@ struct BottomNavBar: View {
                     Text("Search")
                         .font(.caption2)
                 }
-                .foregroundColor(selectedTab == 1 ? .blue : .gray)
+                .foregroundColor(selectedTab == 1 ? .blue : .secondary)
             }
             Spacer()
             Button(action: { selectedTab = 2 }) {
@@ -222,14 +225,15 @@ struct BottomNavBar: View {
                     Text("Profile")
                         .font(.caption2)
                 }
-                .foregroundColor(selectedTab == 2 ? .blue : .gray)
+                .foregroundColor(selectedTab == 2 ? .blue : .secondary)
             }
             Spacer()
         }
         .padding(.vertical, 8)
-        .background(Color.white.shadow(radius: 2))
+        .background(Color(.systemBackground).shadow(radius: 2)) 
     }
 }
+
 
 //Main View
 struct MainTabView: View {
