@@ -10,12 +10,12 @@ struct SearchView: View {
     @State private var searchText = ""
 
     let stations = [
-        Station(name: "DZRM 612", image: "dzrm"),
-        Station(name: "Monster FM", image: "monster"),
-        Station(name: "Yes FM", image: "yesfm"),
-        Station(name: "Veritas 846", image: "veritas"),
-        Station(name: "Wish 107.5", image: "wish"),
-        Station(name: "Easy Rock", image: "easyrock")
+        Station(name: "DZRM 612", image: "Dzrm"),
+        Station(name: "Monster FM", image: "Monster"),
+        Station(name: "Yes FM", image: "Yes"),
+        Station(name: "Veritas", image: "Veritas"),
+        Station(name: "Wish 107.5", image: "Wish"),
+        Station(name: "Easy Rock", image: "Easyrock")
     ]
     
     var body: some View {
@@ -58,7 +58,7 @@ struct SearchView: View {
                         HStack(spacing: 16) {
                             ForEach(stations) { station in
                                 VStack {
-                                    Image(station.image) // must exist in Assets
+                                    Image(station.image)
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 120, height: 120)
@@ -81,7 +81,7 @@ struct SearchView: View {
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
                         ForEach(stations) { station in
                             VStack {
-                                Image(station.image) // must exist in Assets
+                                Image(station.image)
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 150, height: 150)
@@ -106,5 +106,6 @@ struct SearchView: View {
 #Preview {
     SearchView()
 }
+
 
 
