@@ -1,150 +1,147 @@
 import SwiftUI
 
-//
 struct LoginView: View {
     @State private var username: String = ""
     @State private var password: String = ""
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                
-                // Logo
-                VStack(spacing: 8) {
-                    Image(systemName: "radio.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 80, height: 80)
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .cornerRadius(16)
-                    
-                    Text("Live Radio")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    
-                    Text("CONNECT NOW!")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
-                .padding(.top, 60)
-                
-                // Title
-                VStack(spacing: 4) {
-                    Text("Log in an account")
-                        .font(.headline)
-                    
-                    Text("Enter your email to sign in for this app")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
-                .multilineTextAlignment(.center)
-                .padding(.top, 20)
-                
-                // Input Fields
-                VStack(spacing: 15) {
-                    TextField("Username", text: $username)
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .cornerRadius(10)
-                        .autocapitalization(.none)
-                    
-                    SecureField("Enter Password", text: $password)
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .cornerRadius(10)
-                }
-                .padding(.top, 20)
-                
-                // Login Button
-                Button(action: {
-                    print("Login tapped")
-                }) {
-                    Text("Log in")
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.black)
-                        .cornerRadius(10)
-                }
-                .padding(.top, 10)
-                
-                // Create Account
-                HStack(spacing: 4) {
-                    Text("Dont Have an account?")
-                        .foregroundColor(.gray)
-                    
-                    Button(action: {
-                        print("Create account tapped")
-                    }) {
-                        Text("Create Here")
-                            .foregroundColor(.blue)
-                    }
-                }
-                .font(.footnote)
-                .padding(.top, 8)
-                
-                // Divider with OR
-                HStack {
-                    Rectangle()
-                        .frame(height: 1)
-                        .foregroundColor(.gray.opacity(0.4))
-                    Text("or")
-                        .foregroundColor(.gray)
-                    Rectangle()
-                        .frame(height: 1)
-                        .foregroundColor(.gray.opacity(0.4))
-                }
-                .padding(.vertical, 15)
-                
-                // Google Button
-                Button(action: {
-                    print("Google tapped")
-                }) {
-                    HStack {
-                        Image(systemName: "globe")
-                        Text("Continue with Google")
-                    }
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
+        VStack(spacing: 20) {
+            
+            // Logo
+            VStack(spacing: 8) {
+                Image(systemName: "radio.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80, height: 80)
                     .padding()
-                    .background(Color(.systemGray5))
-                    .cornerRadius(10)
-                }
+                    .background(Color(.systemGray6))
+                    .cornerRadius(16)
                 
-                // Apple Button
-                Button(action: {
-                    print("Apple tapped")
-                }) {
-                    HStack {
-                        Image(systemName: "applelogo")
-                        Text("Continue with Apple")
-                    }
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color(.systemGray5))
-                    .cornerRadius(10)
-                }
+                Text("Live Radio")
+                    .font(.title)
+                    .fontWeight(.bold)
                 
-                Spacer(minLength: 40)
-                
-                // Terms
-                Text("By clicking continue, you agree to our Terms of Service and Privacy Policy")
-                    .font(.footnote)
+                Text("CONNECT NOW!")
+                    .font(.subheadline)
                     .foregroundColor(.gray)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 30)
             }
-            .padding(.horizontal, 24)
+            .padding(.top, 60)
+            
+            // Title
+            VStack(spacing: 4) {
+                Text("Log in an account")
+                    .font(.headline)
+                
+                Text("Enter your email to sign in for this app")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+            .multilineTextAlignment(.center)
+            .padding(.top, 20)
+            
+            // Input Fields
+            VStack(spacing: 15) {
+                TextField("Username", text: $username)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                    .autocapitalization(.none)
+                
+                SecureField("Enter Password", text: $password)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+            }
+            .padding(.top, 20)
+            
+            // Login Button
+            Button(action: {
+                print("Login tapped")
+            }) {
+                Text("Log in")
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.black)
+                    .cornerRadius(10)
+            }
+            .padding(.top, 10)
+            
+            // Create Account
+            HStack(spacing: 4) {
+                Text("Dont Have an account?")
+                    .foregroundColor(.gray)
+                
+                Button(action: {
+                    print("Create account tapped")
+                }) {
+                    Text("Create Here")
+                        .foregroundColor(.blue)
+                }
+            }
+            .font(.footnote)
+            .padding(.top, 8)
+            
+            // Divider with OR
+            HStack {
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(.gray.opacity(0.4))
+                Text("or")
+                    .foregroundColor(.gray)
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(.gray.opacity(0.4))
+            }
+            .padding(.vertical, 15)
+            
+            // Google Button
+            Button(action: {
+                print("Google tapped")
+            }) {
+                HStack {
+                    Image(systemName: "globe")
+                    Text("Continue with Google")
+                }
+                .foregroundColor(.black)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color(.systemGray5))
+                .cornerRadius(10)
+            }
+            
+            // Apple Button
+            Button(action: {
+                print("Apple tapped")
+            }) {
+                HStack {
+                    Image(systemName: "applelogo")
+                    Text("Continue with Apple")
+                }
+                .foregroundColor(.black)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color(.systemGray5))
+                .cornerRadius(10)
+            }
+            
+            Spacer() // pushes terms to bottom
+            
+            // Terms
+            Text("By clicking continue, you agree to our Terms of Service and Privacy Policy")
+                .font(.footnote)
+                .foregroundColor(.gray)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 30)
         }
+        .padding(.horizontal, 24)
     }
 }
 
-//
 #Preview {
     LoginView()
 }
+
 
 
