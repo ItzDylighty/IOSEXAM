@@ -11,7 +11,7 @@ SearchView.swift → your SearchView code with Station.
 
 ProfileView.swift → your ProfileView.
 
-*.
+*/
 
 @main
 struct RadioAppApp: App {
