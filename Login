@@ -5,7 +5,7 @@ struct LoginView: View {
     @State private var password: String = ""
 
     var body: some View {
-        VStack(spacing: 16) {   // tighter spacing
+        VStack(spacing: 16) {
             
             // Logo
             VStack(spacing: 4) {
@@ -14,37 +14,30 @@ struct LoginView: View {
                     .scaledToFit()
                     .frame(width: 70, height: 70)
                     .foregroundColor(.black)
-                
-                Text("Live Radio")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                
-                Text("CONNECT NOW!")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
             }
             .padding(.top, 50)
             
             // Title
-            VStack(spacing: 2) {
-                Text("Log in an account")
+            VStack(spacing: 4) {
+                Text("Log in to your account")
                     .font(.headline)
+                
                 Text("Enter your email to sign in for this app")
                     .font(.subheadline)
                     .foregroundColor(.gray)
             }
             .multilineTextAlignment(.center)
-            .padding(.top, 12)
+            .padding(.top, 8)
             
             // Input Fields
-            VStack(spacing: 8) {
+            VStack(spacing: 12) {
                 TextField("Username", text: $username)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
-                    .autocapitalization(.none)
+                    .textInputAutocapitalization(.never)
                 
-                SecureField("Enter Password", text: $password)
+                SecureField("Password", text: $password)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
@@ -124,12 +117,14 @@ struct LoginView: View {
                 .padding(.bottom, 20)
         }
         .padding(.horizontal, 20)
+        .ignoresSafeArea(edges: .bottom)
     }
 }
 
 #Preview {
     LoginView()
 }
+
 
 
 
