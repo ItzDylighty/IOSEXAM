@@ -1,5 +1,3 @@
-Log in (not fit screen, home instead of search)
-
 import SwiftUI
 
 struct ContentView: View {
@@ -7,152 +5,157 @@ struct ContentView: View {
 
     var body: some View {
         if isLoggedIn {
-            SearchView() // Show home/search screen after login
+            ContentView() // change to HomeView
         } else {
-            LoginView(isLoggedIn: $isLoggedIn) // Show login first
+            LoginView(isLoggedIn: $isLoggedIn)
         }
     }
 }
 
-// MARK: - Login View
+//Login View
 struct LoginView: View {
     @Binding var isLoggedIn: Bool
     @State private var username: String = ""
     @State private var password: String = ""
 
     var body: some View {
-        VStack(spacing: 20) {
-            
-            // Placeholder Logo
-            Image(systemName: "radio.fill")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 120, height: 120)
-                .padding(.top, 50)
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(12)
-            
-            Text("Live Radio")
-                .font(.title)
-                .fontWeight(.bold)
-            
-            Text("CONNECT NOW!")
-                .font(.subheadline)
-                .foregroundColor(.gray)
-            
-            Spacer().frame(height: 30)
-            
-            // Username Field
-            TextField("Username", text: $username)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(8)
-                .autocapitalization(.none)
-            
-            // Password Field
-            SecureField("Enter Password", text: $password)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(8)
-            
-            // Login Button
-            Button(action: {
-                print("Login tapped")
-                isLoggedIn = true // Switch to SearchView
-            }) {
-                Text("Log in")
-                    .foregroundColor(.white)
+        ScrollView {
+            VStack(spacing: 20) {
+                
+                // Logo
+                VStack(spacing: 8) {
+                    Image(systemName: "radio.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80, height: 80)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(16)
+                    
+                    Text("Live Radio")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    
+                    Text("CONNECT NOW!")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+                .padding(.top, 60)
+                
+                // Title
+                VStack(spacing: 4) {
+                    Text("Log in an account")
+                        .font(.headline)
+                    
+                    Text("Enter your email to sign in for this app")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+                .multilineTextAlignment(.center)
+                .padding(.top, 20)
+                
+                // Input Fields
+                VStack(spacing: 15) {
+                    TextField("Username", text: $username)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                        .autocapitalization(.none)
+                    
+                    SecureField("Enter Password", text: $password)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                }
+                .padding(.top, 20)
+                
+                // Login Button
+                Button(action: {
+                    isLoggedIn = true
+                }) {
+                    Text("Log in")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.black)
+                        .cornerRadius(10)
+                }
+                .padding(.top, 10)
+                
+                // Create Account
+                HStack(spacing: 4) {
+                    Text("Dont Have an account?")
+                        .foregroundColor(.gray)
+                    
+                    Button(action: {
+                        print("Create account tapped")
+                    }) {
+                        Text("Create Here")
+                            .foregroundColor(.blue)
+                    }
+                }
+                .font(.footnote)
+                .padding(.top, 8)
+                
+                // Divider with OR
+                HStack {
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.gray.opacity(0.4))
+                    Text("or")
+                        .foregroundColor(.gray)
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.gray.opacity(0.4))
+                }
+                .padding(.vertical, 15)
+                
+                // Google Button
+                Button(action: {
+                    print("Google tapped")
+                }) {
+                    HStack {
+                        Image(systemName: "globe")
+                        Text("Continue with Google")
+                    }
+                    .foregroundColor(.black)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.black)
-                    .cornerRadius(8)
-            }
-            
-            // Sign up link
-            HStack {
-                Text("Don't Have an account?")
-                    .foregroundColor(.gray)
+                    .background(Color(.systemGray5))
+                    .cornerRadius(10)
+                }
+                
+                // Apple Button
                 Button(action: {
-                    print("Create account tapped")
+                    print("Apple tapped")
                 }) {
-                    Text("Create Here")
-                        .foregroundColor(.blue)
+                    HStack {
+                        Image(systemName: "applelogo")
+                        Text("Continue with Apple")
+                    }
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color(.systemGray5))
+                    .cornerRadius(10)
                 }
-            }
-            .font(.footnote)
-            .padding(.top, 10)
-            
-            // Divider with "or"
-            HStack {
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundColor(.gray.opacity(0.5))
-                Text("or")
+                
+                Spacer(minLength: 40)
+                
+                // Terms
+                Text("By clicking continue, you agree to our Terms of Service and Privacy Policy")
+                    .font(.footnote)
                     .foregroundColor(.gray)
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundColor(.gray.opacity(0.5))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 30)
             }
-            .padding(.vertical, 10)
-            
-            // Continue with Google
-            Button(action: {
-                print("Google tapped")
-            }) {
-                HStack {
-                    Image(systemName: "globe")
-                    Text("Continue with Google")
-                }
-                .foregroundColor(.black)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color(.systemGray5))
-                .cornerRadius(8)
-            }
-            
-            // Continue with Apple
-            Button(action: {
-                print("Apple tapped")
-            }) {
-                HStack {
-                    Image(systemName: "applelogo")
-                    Text("Continue with Apple")
-                }
-                .foregroundColor(.black)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color(.systemGray5))
-                .cornerRadius(8)
-            }
-            
-            Spacer()
-            
-            // Terms
-            Text("By clicking continue, you agree to our Terms of Service and Privacy Policy")
-                .font(.footnote)
-                .foregroundColor(.gray)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 20)
-                .padding(.bottom, 20)
-        }
-        .padding(.horizontal, 30)
-    }
-}
-
-// MARK: - Example Search View (Home Screen)
-struct SearchView: View {
-    var body: some View {
-        VStack {
-            Text("Search Page")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding()
-            
-            Spacer()
+            .padding(.horizontal, 24)
         }
     }
 }
 
-#Preview {
-    ContentView()
+#Preview("Login Screen") {
+    LoginView(isLoggedIn: .constant(false))
 }
+
