@@ -34,6 +34,7 @@ struct ProfileView: View {
                                 .resizable()
                                 .frame(width: 60, height: 60)
                                 .foregroundColor(.gray)
+                                .clipShape(Circle())
                             
                             Text("Username")
                                 .font(.headline)
