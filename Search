@@ -22,7 +22,7 @@ struct SearchView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             
-            VStack {
+            VStack(spacing: 0) {
                 // Fixed Header
                 HStack {
                     Text("Search")
@@ -48,24 +48,57 @@ struct SearchView: View {
                 .cornerRadius(10)
                 .padding(.horizontal)
                 
-                // Station Grid
-                ScrollView {
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-                        ForEach(stations) { station in
-                            VStack {
-                                Image(station.image) // Add image assets in Assets.xcassets
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 150, height: 150)
-                                    .cornerRadius(8)
-                                
-                                Text(station.name)
-                                    .font(.caption)
-                                    .foregroundColor(.primary)
+                // Main Scroll Area
+                ScrollView(.vertical, showsIndicators: true) {
+                    VStack(alignment: .leading, spacing: 20) {
+                        
+                        // 🔹 Featured Stations (Horizontal Scroll)
+                        Text("Featured Stations")
+                            .font(.headline)
+                            .padding(.horizontal)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                ForEach(stations) { station in
+                                    VStack {
+                                        Image(station.image)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 120, height: 120)
+                                            .cornerRadius(12)
+                                        
+                                        Text(station.name)
+                                            .font(.caption)
+                                            .foregroundColor(.primary)
+                                    }
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                        
+                        // 🔹 All Stations (Vertical Grid)
+                        Text("All Stations")
+                            .font(.headline)
+                            .padding(.horizontal)
+                        
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                            ForEach(stations) { station in
+                                VStack {
+                                    Image(station.image) // Add image assets in Assets.xcassets
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 150, height: 150)
+                                        .cornerRadius(8)
+                                    
+                                    Text(station.name)
+                                        .font(.caption)
+                                        .foregroundColor(.primary)
+                                }
                             }
                         }
+                        .padding(.horizontal)
                     }
-                    .padding()
+                    .padding(.vertical)
                 }
                 
                 Spacer()
@@ -85,4 +118,5 @@ struct SearchView_Previews: PreviewProvider {
         SearchView()
     }
 }
+
 
