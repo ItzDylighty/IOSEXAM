@@ -64,8 +64,8 @@ struct HomeView: View {
                                 MiniStationCard(imageName: "music.note", color: .blue)
                                 MiniStationCard(imageName: "bolt.circle", color: .orange)
                                 MiniStationCard(imageName: "antenna.radiowaves.left.and.right", color: .purple)
-                                MiniStationCard(imageName: "mic.fill", color: .green)      // new card
-                                MiniStationCard(imageName: "waveform.circle", color: .pink) // new card
+                                MiniStationCard(imageName: "mic.fill", color: .green)
+                                MiniStationCard(imageName: "waveform.circle", color: .pink)
                             }
                             .padding(.horizontal)
                         }
@@ -90,8 +90,8 @@ struct HomeView: View {
                                 MiniStationCard(imageName: "antenna.radiowaves.left.and.right", color: .red)
                                 MiniStationCard(imageName: "mic.fill", color: .green)
                                 MiniStationCard(imageName: "waveform.circle", color: .blue)
-                                MiniStationCard(imageName: "newspaper.fill", color: .orange) // new card
-                                MiniStationCard(imageName: "tv.fill", color: .purple)       // new card
+                                MiniStationCard(imageName: "newspaper.fill", color: .orange) 
+                                MiniStationCard(imageName: "tv.fill", color: .purple)
                             }
                             .padding(.horizontal)
                         }
@@ -262,11 +262,6 @@ struct ContentView: View {
         MainTabView()
     }
 }
-
-#Preview {
-    ContentView()
-}
-
 
 #Preview {
     ContentView()
