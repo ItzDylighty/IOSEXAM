@@ -1,10 +1,9 @@
 import SwiftUI
 
-//Home Screen, HomeView.swift
+//Home Screen
 struct HomeView: View {
     var body: some View {
         VStack(spacing: 0) {
-            
             // Fixed Header
             HStack {
                 Text("Home")
@@ -22,7 +21,6 @@ struct HomeView: View {
             // Scrollable Content
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    
                     // On Air Section
                     VStack(alignment: .leading, spacing: 12) {
                         Text("On Air")
@@ -31,13 +29,10 @@ struct HomeView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
-                                StationCardView(imageName: "rectangle.fill", title: "Wish 107.5", subtitle: "dreams come alive", listeners: "12,480", color: .red)
-                                
-                                StationCardView(imageName: "heart.fill", title: "Love Radio", subtitle: "Feel the love everyday!", listeners: "8,320", color: .pink)
-                                
-                                StationCardView(imageName: "music.note", title: "Monster FM", subtitle: "Top hits, non-stop", listeners: "6,120", color: .blue)
-                                
-                                StationCardView(imageName: "antenna.radiowaves.left.and-right", title: "Yes FM", subtitle: "All hits all day", listeners: "4,500", color: .green)
+                                StationCardView(imageName: "Wish", title: "Wish 107.5", subtitle: "dreams come alive", listeners: "12,480", color: .red)
+                                StationCardView(imageName: "Love", title: "Love Radio", subtitle: "Feel the love everyday!", listeners: "8,320", color: .pink)
+                                StationCardView(imageName: "Monster", title: "Monster", subtitle: "Top hits, non-stop", listeners: "6,120", color: .blue)
+                                StationCardView(imageName: "Yes", title: "Yes FM", subtitle: "All hits all day", listeners: "4,500", color: .green)
                             }
                             .padding(.horizontal)
                         }
@@ -59,11 +54,11 @@ struct HomeView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
-                                MiniStationCard(imageName: "music.note", color: .blue)
-                                MiniStationCard(imageName: "bolt.circle", color: .orange)
-                                MiniStationCard(imageName: "antenna.radiowaves.left.and-right", color: .purple)
-                                MiniStationCard(imageName: "mic.fill", color: .green)
-                                MiniStationCard(imageName: "waveform.circle", color: .pink)
+                                MiniStationCard(imageName: "Monster", color: .blue)
+                                MiniStationCard(imageName: "Wish", color: .orange)
+                                MiniStationCard(imageName: "Veritas", color: .purple)
+                                MiniStationCard(imageName: "Easyrock", color: .green)
+                                MiniStationCard(imageName: "Love", color: .pink)
                             }
                             .padding(.horizontal)
                         }
@@ -85,23 +80,23 @@ struct HomeView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
-                                MiniStationCard(imageName: "antenna.radiowaves.left.and-right", color: .red)
-                                MiniStationCard(imageName: "mic.fill", color: .green)
-                                MiniStationCard(imageName: "waveform.circle", color: .blue)
-                                MiniStationCard(imageName: "newspaper.fill", color: .orange)
-                                MiniStationCard(imageName: "tv.fill", color: .purple)
+                                MiniStationCard(imageName: "Dzrm", color: .red)
+                                MiniStationCard(imageName: "Yes", color: .green)
+                                MiniStationCard(imageName: "Love", color: .blue)
+                                MiniStationCard(imageName: "Veritas", color: .orange)
+                                MiniStationCard(imageName: "Easyrock", color: .purple)
                             }
                             .padding(.horizontal)
                         }
                     }
                 }
-                .padding(.bottom, 140) // space for bottom bar
+                .padding(.bottom, 140) // Space for bottom bar
             }
         }
     }
 }
 
-//Components
+// Station Card View
 struct StationCardView: View {
     var imageName: String
     var title: String
@@ -111,17 +106,22 @@ struct StationCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Rectangle()
-                .fill(color)
-                .frame(width: 160, height: 100)
-                .overlay(
-                    Image(systemName: imageName)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(.white.opacity(0.8))
-                        .frame(width: 40, height: 40)
-                )
-                .cornerRadius(10)
+            if let _ = UIImage(named: imageName) {
+                Image(imageName) // Custom image from assets
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 160, height: 100)
+                    .clipped()
+                    .cornerRadius(10)
+            } else {
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 160, height: 100)
+                    .foregroundColor(.gray)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+            }
             
             Text(title)
                 .font(.headline)
@@ -136,6 +136,7 @@ struct StationCardView: View {
     }
 }
 
+// mini card
 struct MiniStationCard: View {
     var imageName: String
     var color: Color
@@ -145,18 +146,18 @@ struct MiniStationCard: View {
             .fill(color)
             .frame(width: 100, height: 100)
             .overlay(
-                Image(systemName: imageName)
+                Image(imageName)
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(.white.opacity(0.9))
-                    .frame(width: 40, height: 40)
+                    .frame(width: 100, height: 100)
             )
             .cornerRadius(12)
     }
 }
 
-// MainTabView.swift (import SwiftUI)
-//Currently Playing Bar
+
+// Currently Playing Bar
 struct CurrentlyPlayingBar: View {
     var body: some View {
         HStack {
@@ -183,15 +184,15 @@ struct CurrentlyPlayingBar: View {
             Button(action: {}) {
                 Image(systemName: "play.fill")
                     .font(.title2)
-                    .foregroundColor(.blue) // keep accent blue
+                    .foregroundColor(.blue)
             }
         }
         .padding()
-        .background(Color(.systemBackground).shadow(radius: 2)) 
+        .background(Color(.systemBackground).shadow(radius: 2))
     }
 }
 
-//Bottom Navigation Bar
+// Bottom Navigation Bar
 struct BottomNavBar: View {
     @Binding var selectedTab: Int
     
@@ -227,18 +228,16 @@ struct BottomNavBar: View {
             Spacer()
         }
         .padding(.vertical, 8)
-        .background(Color(.systemBackground).shadow(radius: 2)) 
+        .background(Color(.systemBackground).shadow(radius: 2))
     }
 }
 
-
-//Main View
+// Main View
 struct MainTabView: View {
     @State private var selectedTab = 0
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            
             // Screen Switching
             Group {
                 if selectedTab == 0 {
@@ -252,19 +251,23 @@ struct MainTabView: View {
             
             // Fixed Bottom Player + Navigation
             VStack(spacing: 0) {
+                Spacer()
                 CurrentlyPlayingBar()
                 BottomNavBar(selectedTab: $selectedTab)
             }
         }
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 
-//Root App sa MainTabView
-@main
-struct YourAppNameApp: App {
-    var body: some Scene {
-        WindowGroup {
-            MainTabView()
-        }
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        MainTabView()
+            .previewDevice("iPhone 14")
+            .preferredColorScheme(.light)
     }
+}
+
+#Preview {
+    HomeView()
 }
