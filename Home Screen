@@ -232,7 +232,7 @@ struct MainTabView: View {
                 if selectedTab == 0 {
                     HomeView()
                 } else if selectedTab == 1 {
-                    Text("Search Screen")
+                    SearchView()
                 } else {
                     Text("Profile Screen")
                 }
