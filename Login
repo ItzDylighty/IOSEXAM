@@ -1,17 +1,5 @@
 import SwiftUI
 
-struct ContentView: View {
-    @State private var isLoggedIn = false
-
-    var body: some View {
-        if isLoggedIn {
-            ContentView() // change to HomeView
-        } else {
-            LoginView(isLoggedIn: $isLoggedIn)
-        }
-    }
-}
-
 //Login View
 struct LoginView: View {
     @Binding var isLoggedIn: Bool
@@ -155,7 +143,8 @@ struct LoginView: View {
     }
 }
 
-#Preview("Login Screen") {
+#Preview {
     LoginView(isLoggedIn: .constant(false))
 }
+
 
