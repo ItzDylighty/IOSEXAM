@@ -162,6 +162,7 @@ struct CurrentlyPlayingBar: View {
             VStack(alignment: .leading) {
                 Text("Now Playing: Wish 107.5")
                     .font(.subheadline)
+                    .foregroundColor(.black)
                 Text("Your music dreams come alive")
                     .font(.caption)
                     .foregroundColor(.gray)
