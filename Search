@@ -8,8 +8,7 @@ struct Station: Identifiable {
 
 struct SearchView: View {
     @State private var searchText = ""
-    @State private var selectedTab = 1  // Default: Search tab
-    
+
     let stations = [
         Station(name: "DZRM 612", image: "dzrm"),
         Station(name: "Monster FM", image: "monster"),
@@ -20,75 +19,50 @@ struct SearchView: View {
     ]
     
     var body: some View {
-        ZStack(alignment: .bottom) {
+        VStack(spacing: 0) {
+            // Fixed Header
+            HStack {
+                Text("Search")
+                    .font(.system(size: 28, weight: .bold))
+                
+                Spacer()
+                
+                Image(systemName: "person.circle")
+                    .resizable()
+                    .frame(width: 28, height: 28)
+            }
+            .padding(.horizontal)
+            .padding(.top, 10)
             
-            VStack(spacing: 0) {
-                // Fixed Header
-                HStack {
-                    Text("Search")
-                        .font(.system(size: 28, weight: .bold))
+            // Search Bar
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                TextField("Search", text: $searchText)
+            }
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
+            .padding(.horizontal)
+            
+            // Main Scroll Area
+            ScrollView(.vertical, showsIndicators: true) {
+                VStack(alignment: .leading, spacing: 20) {
                     
-                    Spacer()
+                    // Featured Stations
+                    Text("Featured Stations")
+                        .font(.headline)
+                        .padding(.horizontal)
                     
-                    Image(systemName: "person.circle")
-                        .resizable()
-                        .frame(width: 28, height: 28)
-                }
-                .padding(.horizontal)
-                .padding(.top, 10)
-                
-                // Search Bar
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
-                    TextField("Search", text: $searchText)
-                }
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .padding(.horizontal)
-                
-                // Main Scroll Area
-                ScrollView(.vertical, showsIndicators: true) {
-                    VStack(alignment: .leading, spacing: 20) {
-                        
-                        // 🔹 Featured Stations (Horizontal Scroll)
-                        Text("Featured Stations")
-                            .font(.headline)
-                            .padding(.horizontal)
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 16) {
-                                ForEach(stations) { station in
-                                    VStack {
-                                        Image(station.image)
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: 120, height: 120)
-                                            .cornerRadius(12)
-                                        
-                                        Text(station.name)
-                                            .font(.caption)
-                                            .foregroundColor(.primary)
-                                    }
-                                }
-                            }
-                            .padding(.horizontal)
-                        }
-                        
-                        // 🔹 All Stations (Vertical Grid)
-                        Text("All Stations")
-                            .font(.headline)
-                            .padding(.horizontal)
-                        
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16) {
                             ForEach(stations) { station in
                                 VStack {
-                                    Image(station.image) // Add image assets in Assets.xcassets
+                                    Image(station.image) // must exist in Assets
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
-                                        .frame(width: 150, height: 150)
-                                        .cornerRadius(8)
+                                        .frame(width: 120, height: 120)
+                                        .cornerRadius(12)
                                     
                                     Text(station.name)
                                         .font(.caption)
@@ -98,25 +72,39 @@ struct SearchView: View {
                         }
                         .padding(.horizontal)
                     }
-                    .padding(.vertical)
+                    
+                    // All Stations
+                    Text("All Stations")
+                        .font(.headline)
+                        .padding(.horizontal)
+                    
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                        ForEach(stations) { station in
+                            VStack {
+                                Image(station.image) // must exist in Assets
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 150, height: 150)
+                                    .cornerRadius(8)
+                                
+                                Text(station.name)
+                                    .font(.caption)
+                                    .foregroundColor(.primary)
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
                 }
-                
-                Spacer()
+                .padding(.vertical)
             }
             
-            // Fixed Bottom Player + Navigation
-            VStack(spacing: 0) {
-                CurrentlyPlayingBar()
-                BottomNavBar(selectedTab: $selectedTab)
-            }
+            Spacer()
         }
     }
 }
 
-struct SearchView_Previews: PreviewProvider {
-    static var previews: some View {
-        SearchView()
-    }
+#Preview {
+    SearchView()
 }
 
 
