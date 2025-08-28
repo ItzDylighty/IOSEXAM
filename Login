@@ -1,8 +1,7 @@
 import SwiftUI
 
-//Login View
+//
 struct LoginView: View {
-    @Binding var isLoggedIn: Bool
     @State private var username: String = ""
     @State private var password: String = ""
 
@@ -59,7 +58,7 @@ struct LoginView: View {
                 
                 // Login Button
                 Button(action: {
-                    isLoggedIn = true
+                    print("Login tapped")
                 }) {
                     Text("Log in")
                         .foregroundColor(.white)
@@ -143,8 +142,9 @@ struct LoginView: View {
     }
 }
 
+//
 #Preview {
-    LoginView(isLoggedIn: .constant(false))
+    LoginView()
 }
 
 
