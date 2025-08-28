@@ -5,34 +5,28 @@ struct LoginView: View {
     @State private var password: String = ""
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 16) {   // tighter spacing
             
-            // Placeholder Container for Logo
-            VStack(spacing: 8) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color(.systemGray6))
-                        .frame(width: 100, height: 100)
-                    
-                    Image(systemName: "radio.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 60, height: 60)
-                        .foregroundColor(.black)
-                }
+            // Logo
+            VStack(spacing: 4) {
+                Image(systemName: "radio.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 70, height: 70)
+                    .foregroundColor(.black)
                 
                 Text("Live Radio")
-                    .font(.title)
+                    .font(.title2)
                     .fontWeight(.bold)
                 
                 Text("CONNECT NOW!")
-                    .font(.subheadline)
+                    .font(.footnote)
                     .foregroundColor(.gray)
             }
-            .padding(.top, 60)
+            .padding(.top, 40)
             
             // Title
-            VStack(spacing: 4) {
+            VStack(spacing: 2) {
                 Text("Log in an account")
                     .font(.headline)
                 Text("Enter your email to sign in for this app")
@@ -40,10 +34,10 @@ struct LoginView: View {
                     .foregroundColor(.gray)
             }
             .multilineTextAlignment(.center)
-            .padding(.top, 20)
+            .padding(.top, 12)
             
             // Input Fields
-            VStack(spacing: 15) {
+            VStack(spacing: 12) {
                 TextField("Username", text: $username)
                     .padding()
                     .background(Color(.systemGray6))
@@ -55,7 +49,7 @@ struct LoginView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
             }
-            .padding(.top, 20)
+            .padding(.top, 16)
             
             // Login Button
             Button(action: { print("Login tapped") }) {
@@ -66,11 +60,11 @@ struct LoginView: View {
                     .background(Color.black)
                     .cornerRadius(10)
             }
-            .padding(.top, 10)
+            .padding(.top, 8)
             
             // Create Account
             HStack(spacing: 4) {
-                Text("Don’t Have an account?")
+                Text("Don’t have an account?")
                     .foregroundColor(.gray)
                 Button(action: { print("Create account tapped") }) {
                     Text("Create Here")
@@ -78,7 +72,7 @@ struct LoginView: View {
                 }
             }
             .font(.footnote)
-            .padding(.top, 8)
+            .padding(.top, 6)
             
             // Divider with OR
             HStack {
@@ -91,7 +85,7 @@ struct LoginView: View {
                     .frame(height: 1)
                     .foregroundColor(.gray.opacity(0.4))
             }
-            .padding(.vertical, 15)
+            .padding(.vertical, 12)
             
             // Google Button
             Button(action: { print("Google tapped") }) {
@@ -127,15 +121,16 @@ struct LoginView: View {
                 .foregroundColor(.gray)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 20)
-                .padding(.bottom, 30)
+                .padding(.bottom, 24)
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, 20)
     }
 }
 
 #Preview {
     LoginView()
 }
+
 
 
 
