@@ -1,13 +1,10 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @Environment(\.presentationMode) var presentationMode
-    
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                
-                //
+                // Header
                 HStack {
                     Text("Account")
                         .font(.system(size: 28, weight: .bold))
@@ -15,7 +12,7 @@ struct ProfileView: View {
                     Spacer()
                     
                     Button(action: {
-                        presentationMode.wrappedValue.dismiss()
+                        // Maybe later: open edit profile?
                     }) {
                         Text("Done")
                             .font(.system(size: 16, weight: .semibold))
@@ -137,3 +134,6 @@ struct ProfileView: View {
     }
 }
 
+#Preview {
+    ProfileView()
+}
