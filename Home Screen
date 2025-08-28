@@ -4,7 +4,7 @@ Palit lang imageName sa panggalan ng imag
 
 import SwiftUI
 
-// MARK: Home Screen
+//Home Screen
 struct HomeView: View {
     var body: some View {
         VStack(spacing: 0) {
@@ -105,7 +105,7 @@ struct HomeView: View {
     }
 }
 
-// MARK: Components
+//Components
 struct StationCardView: View {
     var imageName: String
     var title: String
@@ -159,7 +159,7 @@ struct MiniStationCard: View {
     }
 }
 
-// MARK: Currently Playing Bar
+//Currently Playing Bar
 struct CurrentlyPlayingBar: View {
     var body: some View {
         HStack {
@@ -191,7 +191,7 @@ struct CurrentlyPlayingBar: View {
     }
 }
 
-// MARK: Bottom Navigation Bar
+//Bottom Navigation Bar
 struct BottomNavBar: View {
     @Binding var selectedTab: Int
     
@@ -231,7 +231,7 @@ struct BottomNavBar: View {
     }
 }
 
-// MARK: Main View
+//Main View
 struct MainTabView: View {
     @State private var selectedTab = 0
     
@@ -258,7 +258,7 @@ struct MainTabView: View {
     }
 }
 
-// MARK: Root
+//Root
 struct ContentView: View {
     var body: some View {
         MainTabView()
