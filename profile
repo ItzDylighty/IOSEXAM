@@ -4,133 +4,135 @@ struct ProfileView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
-        VStack(spacing: 0) {
-            
-            //Header
-            HStack {
-                Text("Account")
-                    .font(.system(size: 28, weight: .bold))
+        ZStack {
+            VStack(spacing: 0) {
                 
-                Spacer()
+                //
+                HStack {
+                    Text("Account")
+                        .font(.system(size: 28, weight: .bold))
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Text("Done")
+                            .font(.system(size: 16, weight: .semibold))
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.top, 10)
                 
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }) {
-                    Text("Done")
-                        .font(.system(size: 16, weight: .semibold))
+                // Scrollable Content
+                ScrollView {
+                    VStack(spacing: 28) {
+                        
+                        // User Info
+                        VStack(spacing: 8) {
+                            Image(systemName: "person.circle.fill")
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .foregroundColor(.gray)
+                            
+                            Text("Username")
+                                .font(.headline)
+                            
+                            Text("Email.com")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.top, 20)
+                        
+                        // View Profile Button
+                        Button(action: {}) {
+                            Text("View Full Profile")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.black)
+                                .foregroundColor(.white)
+                                .cornerRadius(25)
+                                .padding(.horizontal)
+                        }
+                        
+                        Divider()
+                        
+                        // Switch Account
+                        HStack {
+                            Text("Switch Account")
+                            Spacer()
+                            Image(systemName: "chevron.down")
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.horizontal)
+                        
+                        Divider()
+                        
+                        // Support Section
+                        VStack(alignment: .leading, spacing: 20) {
+                            Text("Support")
+                                .font(.headline)
+                            
+                            HStack {
+                                Text("App feedback")
+                                Spacer()
+                                Image(systemName: "arrow.up.right")
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            HStack {
+                                Text("Help centre")
+                                Spacer()
+                                Image(systemName: "arrow.up.right")
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                        .padding(.horizontal)
+                        
+                        Divider()
+                        
+                        // Preferences Section
+                        VStack(alignment: .leading, spacing: 20) {
+                            Text("Preferences")
+                                .font(.headline)
+                            
+                            HStack {
+                                Text("Language")
+                                Spacer()
+                                Text("English")
+                                    .foregroundColor(.gray)
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            HStack {
+                                Text("Notification")
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                        .padding(.horizontal)
+                        
+                        Spacer(minLength: 100)
+                        
+                        // Logout Button
+                        Button(action: {}) {
+                            Text("Log out")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.black)
+                                .foregroundColor(.white)
+                                .cornerRadius(25)
+                                .padding(.horizontal)
+                        }
+                        .padding(.bottom, 20)
+                    }
                 }
             }
-            .padding(.horizontal)
-            .padding(.top, 10)
-            
-            //Scrollable Content
-            ScrollView {
-                VStack(spacing: 28) { // More spacing between sections
-                    
-                    // User Info
-                    VStack(spacing: 8) {
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .frame(width: 60, height: 60)
-                            .foregroundColor(.gray)
-                        
-                        Text("Username")
-                            .font(.headline)
-                        
-                        Text("Email.com")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.top, 20)
-                    
-                    // View Profile Button
-                    Button(action: {}) {
-                        Text("View Full Profile")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.black)
-                            .foregroundColor(.white)
-                            .cornerRadius(25)
-                            .padding(.horizontal)
-                    }
-                    
-                    Divider()
-                    
-                    // Switch Account
-                    HStack {
-                        Text("Switch Account")
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.horizontal)
-                    
-                    Divider()
-                    
-                    // Support Section
-                    VStack(alignment: .leading, spacing: 20) {
-                        Text("Support")
-                            .font(.headline)
-                        
-                        HStack {
-                            Text("App feedback")
-                            Spacer()
-                            Image(systemName: "arrow.up.right")
-                                .foregroundColor(.gray)
-                        }
-                        
-                        HStack {
-                            Text("Help centre")
-                            Spacer()
-                            Image(systemName: "arrow.up.right")
-                                .foregroundColor(.gray)
-                        }
-                    }
-                    .padding(.horizontal)
-                    
-                    Divider()
-                    
-                    // Preferences Section
-                    VStack(alignment: .leading, spacing: 20) {
-                        Text("Preferences")
-                            .font(.headline)
-                        
-                        HStack {
-                            Text("Language")
-                            Spacer()
-                            Text("English")
-                                .foregroundColor(.gray)
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.gray)
-                        }
-                        
-                        HStack {
-                            Text("Notification")
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.gray)
-                        }
-                    }
-                    .padding(.horizontal)
-                    
-                    Spacer(minLength: 100) // Add breathing room
-                }
-                .padding(.bottom, 20)
-            }
-            
-            // Fixed Logout Button at Bottom
-            Button(action: {}) {
-                Text("Log out")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.black)
-                    .foregroundColor(.white)
-                    .cornerRadius(25)
-                    .padding(.horizontal)
-            }
-            .padding(.bottom, 20)
         }
     }
 }
+
