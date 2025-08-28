@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: Home Screen
+//Home Screen, HomeView.swift
 struct HomeView: View {
     var body: some View {
         VStack(spacing: 0) {
@@ -101,7 +101,7 @@ struct HomeView: View {
     }
 }
 
-// MARK: Components
+//Components
 struct StationCardView: View {
     var imageName: String
     var title: String
@@ -155,7 +155,8 @@ struct MiniStationCard: View {
     }
 }
 
-// MARK: Currently Playing Bar
+// MainTabView.swift (import SwiftUI)
+//Currently Playing Bar
 struct CurrentlyPlayingBar: View {
     var body: some View {
         HStack {
@@ -187,7 +188,7 @@ struct CurrentlyPlayingBar: View {
     }
 }
 
-// MARK: Bottom Navigation Bar
+//Bottom Navigation Bar
 struct BottomNavBar: View {
     @Binding var selectedTab: Int
     
@@ -227,7 +228,7 @@ struct BottomNavBar: View {
     }
 }
 
-// MARK: Main View
+//Main View
 struct MainTabView: View {
     @State private var selectedTab = 0
     
@@ -254,7 +255,7 @@ struct MainTabView: View {
     }
 }
 
-// MARK: Root App sa MainTabView
+//Root App sa MainTabView
 @main
 struct YourAppNameApp: App {
     var body: some Scene {
