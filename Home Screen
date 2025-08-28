@@ -59,12 +59,16 @@ struct HomeView: View {
                         }
                         .padding(.horizontal)
                         
-                        HStack(spacing: 16) {
-                            MiniStationCard(imageName: "music.note", color: .blue)
-                            MiniStationCard(imageName: "bolt.circle", color: .orange)
-                            MiniStationCard(imageName: "antenna.radiowaves.left.and.right", color: .purple)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                MiniStationCard(imageName: "music.note", color: .blue)
+                                MiniStationCard(imageName: "bolt.circle", color: .orange)
+                                MiniStationCard(imageName: "antenna.radiowaves.left.and.right", color: .purple)
+                                MiniStationCard(imageName: "mic.fill", color: .green)      // new card
+                                MiniStationCard(imageName: "waveform.circle", color: .pink) // new card
+                            }
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
                     }
                     
                     // News Live
@@ -81,12 +85,16 @@ struct HomeView: View {
                         }
                         .padding(.horizontal)
                         
-                        HStack(spacing: 16) {
-                            MiniStationCard(imageName: "antenna.radiowaves.left.and.right", color: .red)
-                            MiniStationCard(imageName: "mic.fill", color: .green)
-                            MiniStationCard(imageName: "waveform.circle", color: .blue)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                MiniStationCard(imageName: "antenna.radiowaves.left.and.right", color: .red)
+                                MiniStationCard(imageName: "mic.fill", color: .green)
+                                MiniStationCard(imageName: "waveform.circle", color: .blue)
+                                MiniStationCard(imageName: "newspaper.fill", color: .orange) // new card
+                                MiniStationCard(imageName: "tv.fill", color: .purple)       // new card
+                            }
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
                     }
                 }
                 .padding(.bottom, 140) // space for bottom bar
@@ -254,6 +262,11 @@ struct ContentView: View {
         MainTabView()
     }
 }
+
+#Preview {
+    ContentView()
+}
+
 
 #Preview {
     ContentView()
