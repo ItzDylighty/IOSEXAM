@@ -23,7 +23,7 @@ struct LoginView: View {
                     .font(.footnote)
                     .foregroundColor(.gray)
             }
-            .padding(.top, 40)
+            .padding(.top, 50)
             
             // Title
             VStack(spacing: 2) {
@@ -37,7 +37,7 @@ struct LoginView: View {
             .padding(.top, 12)
             
             // Input Fields
-            VStack(spacing: 12) {
+            VStack(spacing: 8) {
                 TextField("Username", text: $username)
                     .padding()
                     .background(Color(.systemGray6))
@@ -49,7 +49,7 @@ struct LoginView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
             }
-            .padding(.top, 16)
+            .padding(.top, 12)
             
             // Login Button
             Button(action: { print("Login tapped") }) {
@@ -121,7 +121,7 @@ struct LoginView: View {
                 .foregroundColor(.gray)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 20)
-                .padding(.bottom, 24)
+                .padding(.bottom, 20)
         }
         .padding(.horizontal, 20)
     }
