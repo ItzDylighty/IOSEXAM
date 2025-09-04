@@ -1,0 +1,280 @@
+import SwiftUI
+import SwiftData
+import CryptoKit
+
+
+func hashPassword(_ password: String) -> String {
+    let hashed = SHA256.hash(data: Data(password.utf8))
+    return hashed.map { String(format: "%02x", $0) }.joined()
+}
+
+
+struct LoginView: View {
+    @Environment(\.modelContext) private var context
+    @Query var users: [User]
+
+    @AppStorage("loggedInUser") private var loggedInUser: String = ""
+
+    @State private var username: String = ""
+    @State private var password: String = ""
+    @State private var isShowingSignup = false
+    @State private var loginFailed = false
+
+    var body: some View {
+        if !loggedInUser.isEmpty {
+            HomeView(username: loggedInUser)
+        } else {
+            NavigationStack {
+                VStack(spacing: 16) {
+                    // Logo
+                    Image(systemName: "radio.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 70, height: 70)
+                        .foregroundColor(.black)
+                        .padding(.top, 50)
+
+                    // Title
+                    VStack(spacing: 4) {
+                        Text("Log in to your account")
+                            .font(.headline)
+                        Text("Enter your email to sign in for this app")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 8)
+
+                    // Input Fields
+                    VStack(spacing: 12) {
+                        TextField("Username", text: $username)
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(10)
+                            .textInputAutocapitalization(.never)
+
+                        SecureField("Password", text: $password)
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(10)
+                    }
+                    .padding(.top, 12)
+
+                    // Login Button
+                    Button(action: {
+                        login()
+                    }) {
+                        Text("Log in")
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.black)
+                            .cornerRadius(10)
+                    }
+                    .padding(.top, 8)
+                    .alert("Login failed", isPresented: $loginFailed) {
+                        Button("OK", role: .cancel) { }
+                    }
+
+                    // Create Account
+                    HStack(spacing: 4) {
+                        Text("Don’t have an account?")
+                            .foregroundColor(.gray)
+                        Button(action: {
+                            isShowingSignup = true
+                        }) {
+                            Text("Create Here")
+                                .foregroundColor(.blue)
+                        }
+                    }
+                    .font(.footnote)
+                    .padding(.top, 6)
+
+                    // Divider with OR
+                    HStack {
+                        Rectangle().frame(height: 1).foregroundColor(.gray.opacity(0.4))
+                        Text("or").foregroundColor(.gray)
+                        Rectangle().frame(height: 1).foregroundColor(.gray.opacity(0.4))
+                    }
+                    .padding(.vertical, 12)
+
+                    // Google Button
+                    Button(action: { print("Google tapped") }) {
+                        HStack {
+                            Image(systemName: "globe")
+                            Text("Continue with Google")
+                        }
+                        .foregroundColor(.black)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(.systemGray5))
+                        .cornerRadius(10)
+                    }
+
+                    // Apple Button
+                    Button(action: { print("Apple tapped") }) {
+                        HStack {
+                            Image(systemName: "applelogo")
+                            Text("Continue with Apple")
+                        }
+                        .foregroundColor(.black)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(.systemGray5))
+                        .cornerRadius(10)
+                    }
+
+                    Spacer()
+
+                    Text("By clicking continue, you agree to our Terms of Service and Privacy Policy")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 45)
+                }
+                .padding(.horizontal, 20)
+                .ignoresSafeArea(edges: .bottom)
+                .navigationDestination(isPresented: $isShowingSignup) {
+                    SignupView()
+                }
+            }
+        }
+    }
+
+    private func login() {
+        let hashedInput = hashPassword(password)
+        if let user = users.first(where: { $0.username == username && $0.password == hashedInput }) {
+            loggedInUser = user.username
+        } else {
+            loginFailed = true
+        }
+    }
+}
+
+
+struct SignupView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
+    @Query var users: [User]
+
+    @State private var username: String = ""
+    @State private var password: String = ""
+    @State private var reEnterPassword: String = ""
+
+    @State private var showPasswordMismatchAlert = false
+    @State private var showUserExistsAlert = false
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Create your account")
+                .font(.largeTitle)
+                .bold()
+                .padding(.top, 50)
+
+            VStack(spacing: 12) {
+                TextField("Username", text: $username)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                    .textInputAutocapitalization(.never)
+
+                SecureField("Password", text: $password)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+
+                SecureField("Re-Enter Password", text: $reEnterPassword)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+            }
+            .padding(.top, 20)
+
+            Button(action: {
+                createAccount()
+            }) {
+                Text("Create")
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.black)
+                    .cornerRadius(10)
+            }
+            .padding(.top, 12)
+            .alert("Passwords do not match", isPresented: $showPasswordMismatchAlert) {
+                Button("OK", role: .cancel) { }
+            }
+            .alert("Username already exists", isPresented: $showUserExistsAlert) {
+                Button("OK", role: .cancel) { }
+            }
+
+            Spacer()
+        }
+        .padding(.horizontal, 20)
+    }
+
+    private func createAccount() {
+        guard password == reEnterPassword, !password.isEmpty else {
+            showPasswordMismatchAlert = true
+            return
+        }
+
+        if users.contains(where: { $0.username == username }) {
+            showUserExistsAlert = true
+            return
+        }
+
+        let hashedPassword = hashPassword(password)
+        let newUser = User(username: username, password: hashedPassword)
+        context.insert(newUser)
+
+        do {
+            try context.save()
+            dismiss()
+        } catch {
+            print("Failed to save user: \(error)")
+        }
+    }
+}
+
+
+
+#Preview {
+    LoginView()
+}
+
+
+
+// User swift
+
+import SwiftData
+
+@Model
+class User {
+    var username: String
+    var password: String
+
+    init(username: String, password: String) {
+        self.username = username
+        self.password = password
+    }
+}
+
+//Myapp
+
+import SwiftUI
+import SwiftData
+
+@main
+struct MyApp: App {
+    var body: some Scene {
+        WindowGroup {
+            LoginView()
+        }
+        .modelContainer(for: User.self)
+    }
+}
+
+
+
