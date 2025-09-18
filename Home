@@ -84,11 +84,41 @@ struct HomeView: View {
                                 MiniStationCard(imageName: "Yes", color: .green)
                                 MiniStationCard(imageName: "Love", color: .blue)
                                 MiniStationCard(imageName: "Veritas", color: .orange)
-                                MiniStationCard(imageName: "Easyrock", color: .purple)
+                                MiniStationCard(imageName: "Easyrock", color: .green)
                             }
                             .padding(.horizontal)
                         }
                     }
+                    
+                    
+                    // Others
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Others")
+                                .font(.headline)
+                            Spacer()
+                            Button(action: {}) {
+                                Text(">")
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                            }
+                        }
+                        .padding(.horizontal)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                MiniStationCard(imageName: "Wish", color: .red)
+                                MiniStationCard(imageName: "Yes", color: .green)
+                                MiniStationCard(imageName: "Love", color: .blue)
+                                MiniStationCard(imageName: "Veritas", color: .orange)
+                                MiniStationCard(imageName: "Easyrock", color: .green)
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                    
+                    
+                    
                 }
                 .padding(.bottom, 140) // Space for bottom bar
             }
@@ -249,7 +279,7 @@ struct MainTabView: View {
                 }
             }
             
-            // Fixed Bottom Player + Navigation
+            // Fixed Bottom Player  Navigation
             VStack(spacing: 0) {
                 Spacer()
                 CurrentlyPlayingBar()
@@ -260,10 +290,10 @@ struct MainTabView: View {
     }
 }
 
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         MainTabView()
-            .previewDevice("iPhone 14")
             .preferredColorScheme(.light)
     }
 }
@@ -271,3 +301,4 @@ struct ContentView_Previews: PreviewProvider {
 #Preview {
     HomeView()
 }
+
