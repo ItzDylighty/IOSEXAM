@@ -1,14 +1,16 @@
 import SwiftUI
 
+// LoginView
 struct LoginView: View {
     @State private var username: String = ""
     @State private var password: String = ""
     @State private var isShowingSignup = false  // For navigation to SignupView
-
+    @State private var isAuthenticated = false   // Flag for successful login attempt
+    @Environment(\.dismiss) private var dismiss  // To dismiss the view
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 16) {
-                
                 // Logo
                 VStack(spacing: 4) {
                     Image(systemName: "radio.fill")
@@ -38,6 +40,7 @@ struct LoginView: View {
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
                         .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
                     
                     SecureField("Password", text: $password)
                         .padding()
@@ -47,7 +50,9 @@ struct LoginView: View {
                 .padding(.top, 12)
                 
                 // Login Button
-                Button(action: { print("Login tapped") }) {
+                Button(action: {
+                    loginUser()
+                }) {
                     Text("Log in")
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -126,11 +131,44 @@ struct LoginView: View {
             .navigationDestination(isPresented: $isShowingSignup) {
                 SignupView()
             }
+            
+            // Show login success/failure alert
+            .alert(isPresented: $isAuthenticated) {
+                Alert(
+                    title: Text("Login Successful"),
+                    message: Text("You have logged in successfully!"),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+            
+            // Conditional NavigationLink to MainTabView after successful login
+            .background(
+                NavigationLink(destination: MainTabView(), isActive: $isAuthenticated) {
+                    EmptyView()
+                }
+                .hidden()
+            )
+        }
+    }
+    
+    // Function to handle login
+    private func loginUser() {
+        // Retrieve stored credentials from UserDefaults
+        let savedUsername = UserDefaults.standard.string(forKey: "savedUsername")
+        let savedPassword = UserDefaults.standard.string(forKey: "savedPassword")
+        
+        // Check if entered credentials match the saved ones
+        if username == savedUsername && password == savedPassword {
+            // Simulate successful login
+            isAuthenticated = true
+        } else {
+            isAuthenticated = false
+            print("Login failed!")
         }
     }
 }
 
-// SignupView implementation
+// SignupView
 struct SignupView: View {
     @Environment(\.dismiss) private var dismiss
 
@@ -169,6 +207,9 @@ struct SignupView: View {
             
             Button(action: {
                 if password == reEnterPassword && !password.isEmpty {
+                    // Save the credentials to UserDefaults
+                    UserDefaults.standard.set(username, forKey: "savedUsername")
+                    UserDefaults.standard.set(password, forKey: "savedPassword")
 
                     dismiss()
                     print("Account Created - Username: \(username)")
@@ -195,6 +236,8 @@ struct SignupView: View {
     }
 }
 
+// Preview
 #Preview {
     LoginView()
 }
+
