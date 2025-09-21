@@ -15,8 +15,24 @@ struct SearchView: View {
         Station(name: "Yes FM", image: "Yes"),
         Station(name: "Veritas", image: "Veritas"),
         Station(name: "Wish 107.5", image: "Wish"),
-        Station(name: "Easy Rock", image: "Easyrock")
+        Station(name: "Easy Rock", image: "Easyrock"),
+        Station(name: "Love Radio", image: "Love"),
+        Station(name: "Radyo 5", image: "Radyo5"),
+        Station(name: "Barangay LS 97.1", image: "Barangay"),
+        Station(name: "Home Radio", image: "Home"),
+        Station(name: "Energy FM", image: "Energy"),
+        Station(name: "DWLS FM", image: "Dwls"),
+        Station(name: "Brigada News FM", image: "Brigada"),
+        Station(name: "Radyo Natin", image: "RadyoNatin")
     ]
+    
+    var filteredStations: [Station] {
+        if searchText.isEmpty {
+            return stations
+        } else {
+            return stations.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -49,20 +65,49 @@ struct SearchView: View {
             ScrollView(.vertical, showsIndicators: true) {
                 VStack(alignment: .leading, spacing: 20) {
                     
-                    // Featured Stations
-                    Text("Featured Stations")
-                        .font(.headline)
-                        .padding(.horizontal)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 16) {
-                            ForEach(stations) { station in
+                    if filteredStations.isEmpty {
+                        Text("Station Not Found")
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                            .frame(maxWidth: .infinity, minHeight: 200, alignment: .center)
+                    } else {
+                        // Featured Stations
+                        Text("Featured Stations")
+                            .font(.headline)
+                            .padding(.horizontal)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                ForEach(filteredStations) { station in
+                                    VStack {
+                                        Image(station.image)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 120, height: 120)
+                                            .cornerRadius(12)
+                                        
+                                        Text(station.name)
+                                            .font(.caption)
+                                            .foregroundColor(.primary)
+                                    }
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                        
+                        // All Stations
+                        Text("All Stations")
+                            .font(.headline)
+                            .padding(.horizontal)
+                        
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                            ForEach(filteredStations) { station in
                                 VStack {
                                     Image(station.image)
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
-                                        .frame(width: 120, height: 120)
-                                        .cornerRadius(12)
+                                        .frame(width: 150, height: 150)
+                                        .cornerRadius(8)
                                     
                                     Text(station.name)
                                         .font(.caption)
@@ -72,28 +117,6 @@ struct SearchView: View {
                         }
                         .padding(.horizontal)
                     }
-                    
-                    // All Stations
-                    Text("All Stations")
-                        .font(.headline)
-                        .padding(.horizontal)
-                    
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-                        ForEach(stations) { station in
-                            VStack {
-                                Image(station.image)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 150, height: 150)
-                                    .cornerRadius(8)
-                                
-                                Text(station.name)
-                                    .font(.caption)
-                                    .foregroundColor(.primary)
-                            }
-                        }
-                    }
-                    .padding(.horizontal)
                 }
                 .padding(.vertical)
             }
@@ -106,6 +129,3 @@ struct SearchView: View {
 #Preview {
     SearchView()
 }
-
-
-
