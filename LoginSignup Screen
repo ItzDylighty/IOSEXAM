@@ -1,12 +1,39 @@
 import SwiftUI
+import SwiftData
 
-// LoginView
+// MARK: - SwiftData Model
+@Model
+class UserAccount {
+    @Attribute(.unique) var username: String
+    var password: String
+
+    init(username: String, password: String) {
+        self.username = username
+        self.password = password
+    }
+}
+
+// MARK: - App Entry
+@main
+struct YourAppNameApp: App {
+    var body: some Scene {
+        WindowGroup {
+            LoginView()
+        }
+        .modelContainer(for: UserAccount.self)   // 👈 SwiftData container
+    }
+}
+
+// MARK: - LoginView
 struct LoginView: View {
+    @Environment(\.modelContext) private var context
+    @Query var users: [UserAccount]   // fetch all users
+    
     @State private var username: String = ""
     @State private var password: String = ""
-    @State private var isShowingSignup = false  // For navigation to SignupView
-    @State private var isAuthenticated = false   // Flag for successful login attempt
-    @Environment(\.dismiss) private var dismiss  // To dismiss the view
+    @State private var isShowingSignup = false
+    @State private var isAuthenticated = false
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationStack {
@@ -50,9 +77,7 @@ struct LoginView: View {
                 .padding(.top, 12)
                 
                 // Login Button
-                Button(action: {
-                    loginUser()
-                }) {
+                Button(action: { loginUser() }) {
                     Text("Log in")
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -62,13 +87,11 @@ struct LoginView: View {
                 }
                 .padding(.top, 8)
                 
-                // Create Account - navigate to SignupView
+                // Create Account
                 HStack(spacing: 4) {
                     Text("Don’t have an account?")
                         .foregroundColor(.gray)
-                    Button(action: {
-                        isShowingSignup = true
-                    }) {
+                    Button(action: { isShowingSignup = true }) {
                         Text("Create Here")
                             .foregroundColor(.blue)
                     }
@@ -127,12 +150,9 @@ struct LoginView: View {
             }
             .padding(.horizontal, 20)
             .ignoresSafeArea(edges: .bottom)
-            // Navigate to SignupView when isShowingSignup is true
             .navigationDestination(isPresented: $isShowingSignup) {
                 SignupView()
             }
-            
-            // Show login success/failure alert
             .alert(isPresented: $isAuthenticated) {
                 Alert(
                     title: Text("Login Successful"),
@@ -140,8 +160,6 @@ struct LoginView: View {
                     dismissButton: .default(Text("OK"))
                 )
             }
-            
-            // Conditional NavigationLink to MainTabView after successful login
             .background(
                 NavigationLink(destination: MainTabView(), isActive: $isAuthenticated) {
                     EmptyView()
@@ -151,15 +169,9 @@ struct LoginView: View {
         }
     }
     
-    // Function to handle login
     private func loginUser() {
-        // Retrieve stored credentials from UserDefaults
-        let savedUsername = UserDefaults.standard.string(forKey: "savedUsername")
-        let savedPassword = UserDefaults.standard.string(forKey: "savedPassword")
-        
-        // Check if entered credentials match the saved ones
-        if username == savedUsername && password == savedPassword {
-            // Simulate successful login
+        // check if any user matches the entered credentials
+        if users.first(where: { $0.username == username && $0.password == password }) != nil {
             isAuthenticated = true
         } else {
             isAuthenticated = false
@@ -168,19 +180,18 @@ struct LoginView: View {
     }
 }
 
-// SignupView
+// MARK: - SignupView
 struct SignupView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
 
     @State private var username: String = ""
     @State private var password: String = ""
     @State private var reEnterPassword: String = ""
-
     @State private var showPasswordMismatchAlert = false
 
     var body: some View {
         VStack(spacing: 16) {
-            
             Text("Create your account")
                 .font(.largeTitle)
                 .bold()
@@ -207,14 +218,12 @@ struct SignupView: View {
             
             Button(action: {
                 if password == reEnterPassword && !password.isEmpty {
-                    // Save the credentials to UserDefaults
-                    UserDefaults.standard.set(username, forKey: "savedUsername")
-                    UserDefaults.standard.set(password, forKey: "savedPassword")
-
+                    let newUser = UserAccount(username: username, password: password)
+                    context.insert(newUser)
+                    try? context.save()
                     dismiss()
                     print("Account Created - Username: \(username)")
                 } else {
-                    // Show alert for mismatch
                     showPasswordMismatchAlert = true
                 }
             }) {
@@ -233,12 +242,11 @@ struct SignupView: View {
             Spacer()
         }
         .padding(.horizontal, 20)
+        .navigationBarBackButtonHidden(true)
     }
-        .navigationBarBackButtonHidden(True)
 }
 
-// Preview
+// MARK: - Preview
 #Preview {
     LoginView()
 }
-
