@@ -1,6 +1,6 @@
 import SwiftUI
 
-// Home Screen
+//Home Screen
 struct HomeView: View {
     var body: some View {
         VStack(spacing: 0) {
@@ -21,7 +21,6 @@ struct HomeView: View {
             // Scrollable Content
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    
                     // On Air Section
                     VStack(alignment: .leading, spacing: 12) {
                         Text("On Air")
@@ -91,6 +90,7 @@ struct HomeView: View {
                         }
                     }
                     
+                    
                     // Others
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
@@ -116,6 +116,9 @@ struct HomeView: View {
                             .padding(.horizontal)
                         }
                     }
+                    
+                    
+                    
                 }
                 .padding(.bottom, 140) // Space for bottom bar
             }
@@ -163,7 +166,7 @@ struct StationCardView: View {
     }
 }
 
-// Mini Card
+// mini card
 struct MiniStationCard: View {
     var imageName: String
     var color: Color
@@ -182,6 +185,7 @@ struct MiniStationCard: View {
             .cornerRadius(12)
     }
 }
+
 
 // Currently Playing Bar
 struct CurrentlyPlayingBar: View {
@@ -225,7 +229,6 @@ struct BottomNavBar: View {
     var body: some View {
         HStack {
             Spacer()
-            
             Button(action: { selectedTab = 0 }) {
                 VStack {
                     Image(systemName: "house.fill")
@@ -234,9 +237,7 @@ struct BottomNavBar: View {
                 }
                 .foregroundColor(selectedTab == 0 ? .blue : .secondary)
             }
-            
             Spacer()
-            
             Button(action: { selectedTab = 1 }) {
                 VStack {
                     Image(systemName: "magnifyingglass")
@@ -245,9 +246,7 @@ struct BottomNavBar: View {
                 }
                 .foregroundColor(selectedTab == 1 ? .blue : .secondary)
             }
-            
             Spacer()
-            
             Button(action: { selectedTab = 2 }) {
                 VStack {
                     Image(systemName: "person.fill")
@@ -256,7 +255,6 @@ struct BottomNavBar: View {
                 }
                 .foregroundColor(selectedTab == 2 ? .blue : .secondary)
             }
-            
             Spacer()
         }
         .padding(.vertical, 8)
@@ -267,6 +265,7 @@ struct BottomNavBar: View {
 // Main View
 struct MainTabView: View {
     @State private var selectedTab = 0
+    @State private var showPlayer = false   // for sheet
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -284,13 +283,26 @@ struct MainTabView: View {
             // Fixed Bottom Player + Navigation
             VStack(spacing: 0) {
                 Spacer()
+                
+                // Tap on bar opens sheet
                 CurrentlyPlayingBar()
+                    .onTapGesture {
+                        showPlayer.toggle()
+                    }
+                
                 BottomNavBar(selectedTab: $selectedTab)
             }
         }
         .edgesIgnoringSafeArea(.bottom)
+        // sheet presentation
+        .sheet(isPresented: $showPlayer) {
+            PlayerView()
+                .presentationDetents([.medium, .large]) // drag to resize
+        }
     }
 }
+
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
@@ -302,5 +314,6 @@ struct ContentView_Previews: PreviewProvider {
 #Preview {
     HomeView()
 }
+
 
 
