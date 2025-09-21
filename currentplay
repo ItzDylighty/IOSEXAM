@@ -1,7 +1,5 @@
-import SwiftUI
-
+// Player View
 struct PlayerView: View {
-    @EnvironmentObject var playerManager: PlayerManager
     @State private var volume: Double = 0.5
 
     var body: some View {
@@ -12,29 +10,20 @@ struct PlayerView: View {
                 .frame(width: 300, height: 300)
                 .cornerRadius(12)
                 .overlay(
-                    Group {
-                        if let station = playerManager.currentStation,
-                           let uiImage = UIImage(named: station.imageName) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFit()
-                        } else {
-                            Image(systemName: "music.note")
-                                .resizable()
-                                .scaledToFit()
-                                .foregroundColor(.primary.opacity(0.7))
-                                .frame(width: 80, height: 80)
-                        }
-                    }
+                    Image(systemName: "music.note")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.primary.opacity(0.7))
+                        .frame(width: 80, height: 80)
                 )
                 .padding(.top, 40)
 
             // Track info
             VStack(spacing: 8) {
-                Text(playerManager.currentStation?.name ?? "No Station Selected")
+                Text("Wish 107.5")
                     .font(.title2)
                     .fontWeight(.bold)
-                Text(playerManager.currentStation?.subtitle ?? "")
+                Text("Your music dreams come alive")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -72,6 +61,5 @@ struct PlayerView: View {
 }
 
 #Preview {
-    PlayerView().environmentObject(PlayerManager())
+    PlayerView()
 }
-
