@@ -1,23 +1,37 @@
 import SwiftUI
 
+// MARK: - Shared player state
+final class PlayerManager: ObservableObject {
+    @Published var currentStation: Station? = nil
+}
+
+struct Station: Identifiable, Equatable {
+    let id = UUID()
+    let name: String
+    let subtitle: String
+    let imageName: String
+}
+
 //Home Screen
 struct HomeView: View {
+    @EnvironmentObject var playerManager: PlayerManager
+
     var body: some View {
         VStack(spacing: 0) {
             // Fixed Header
             HStack {
                 Text("Home")
                     .font(.system(size: 28, weight: .bold))
-                
+
                 Spacer()
-                
+
                 Image(systemName: "person.circle")
                     .resizable()
                     .frame(width: 28, height: 28)
             }
             .padding(.horizontal)
             .padding(.top, 10)
-            
+
             // Scrollable Content
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
@@ -26,18 +40,53 @@ struct HomeView: View {
                         Text("On Air")
                             .font(.headline)
                             .padding(.horizontal)
-                        
+
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
-                                StationCardView(imageName: "Wish", title: "Wish 107.5", subtitle: "dreams come alive", listeners: "12,480", color: .red)
-                                StationCardView(imageName: "Love", title: "Love Radio", subtitle: "Feel the love everyday!", listeners: "8,320", color: .pink)
-                                StationCardView(imageName: "Monster", title: "Monster", subtitle: "Top hits, non-stop", listeners: "6,120", color: .blue)
-                                StationCardView(imageName: "Yes", title: "Yes FM", subtitle: "All hits all day", listeners: "4,500", color: .green)
+                                StationCardView(imageName: "Wish", title: "Wish 107.5",
+                                                subtitle: "dreams come alive",
+                                                listeners: "12,480", color: .red)
+                                .onTapGesture {
+                                    playerManager.currentStation =
+                                      Station(name: "Wish 107.5",
+                                              subtitle: "dreams come alive",
+                                              imageName: "Wish")
+                                }
+
+                                StationCardView(imageName: "Love", title: "Love Radio",
+                                                subtitle: "Feel the love everyday!",
+                                                listeners: "8,320", color: .pink)
+                                .onTapGesture {
+                                    playerManager.currentStation =
+                                      Station(name: "Love Radio",
+                                              subtitle: "Feel the love everyday!",
+                                              imageName: "Love")
+                                }
+
+                                StationCardView(imageName: "Monster", title: "Monster",
+                                                subtitle: "Top hits, non-stop",
+                                                listeners: "6,120", color: .blue)
+                                .onTapGesture {
+                                    playerManager.currentStation =
+                                      Station(name: "Monster",
+                                              subtitle: "Top hits, non-stop",
+                                              imageName: "Monster")
+                                }
+
+                                StationCardView(imageName: "Yes", title: "Yes FM",
+                                                subtitle: "All hits all day",
+                                                listeners: "4,500", color: .green)
+                                .onTapGesture {
+                                    playerManager.currentStation =
+                                      Station(name: "Yes FM",
+                                              subtitle: "All hits all day",
+                                              imageName: "Yes")
+                                }
                             }
                             .padding(.horizontal)
                         }
                     }
-                    
+
                     // Recently Listen
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
@@ -51,19 +100,49 @@ struct HomeView: View {
                             }
                         }
                         .padding(.horizontal)
-                        
+
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
                                 MiniStationCard(imageName: "Monster", color: .blue)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Monster",
+                                                  subtitle: "Top hits, non-stop",
+                                                  imageName: "Monster")
+                                    }
                                 MiniStationCard(imageName: "Wish", color: .orange)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Wish 107.5",
+                                                  subtitle: "dreams come alive",
+                                                  imageName: "Wish")
+                                    }
                                 MiniStationCard(imageName: "Veritas", color: .purple)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Veritas",
+                                                  subtitle: "Latest news",
+                                                  imageName: "Veritas")
+                                    }
                                 MiniStationCard(imageName: "Easyrock", color: .green)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Easyrock",
+                                                  subtitle: "Easy listening hits",
+                                                  imageName: "Easyrock")
+                                    }
                                 MiniStationCard(imageName: "Love", color: .pink)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Love Radio",
+                                                  subtitle: "Feel the love everyday!",
+                                                  imageName: "Love")
+                                    }
                             }
                             .padding(.horizontal)
                         }
                     }
-                    
+
                     // News Live
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
@@ -77,20 +156,49 @@ struct HomeView: View {
                             }
                         }
                         .padding(.horizontal)
-                        
+
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
                                 MiniStationCard(imageName: "Dzrm", color: .red)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Dzrm",
+                                                  subtitle: "Breaking news",
+                                                  imageName: "Dzrm")
+                                    }
                                 MiniStationCard(imageName: "Yes", color: .green)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Yes FM",
+                                                  subtitle: "All hits all day",
+                                                  imageName: "Yes")
+                                    }
                                 MiniStationCard(imageName: "Love", color: .blue)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Love Radio",
+                                                  subtitle: "Feel the love everyday!",
+                                                  imageName: "Love")
+                                    }
                                 MiniStationCard(imageName: "Veritas", color: .orange)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Veritas",
+                                                  subtitle: "Latest news",
+                                                  imageName: "Veritas")
+                                    }
                                 MiniStationCard(imageName: "Easyrock", color: .green)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Easyrock",
+                                                  subtitle: "Easy listening hits",
+                                                  imageName: "Easyrock")
+                                    }
                             }
                             .padding(.horizontal)
                         }
                     }
-                    
-                    
+
                     // Others
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
@@ -104,21 +212,48 @@ struct HomeView: View {
                             }
                         }
                         .padding(.horizontal)
-                        
+
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
                                 MiniStationCard(imageName: "Wish", color: .red)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Wish 107.5",
+                                                  subtitle: "dreams come alive",
+                                                  imageName: "Wish")
+                                    }
                                 MiniStationCard(imageName: "Yes", color: .green)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Yes FM",
+                                                  subtitle: "All hits all day",
+                                                  imageName: "Yes")
+                                    }
                                 MiniStationCard(imageName: "Love", color: .blue)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Love Radio",
+                                                  subtitle: "Feel the love everyday!",
+                                                  imageName: "Love")
+                                    }
                                 MiniStationCard(imageName: "Veritas", color: .orange)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Veritas",
+                                                  subtitle: "Latest news",
+                                                  imageName: "Veritas")
+                                    }
                                 MiniStationCard(imageName: "Easyrock", color: .green)
+                                    .onTapGesture {
+                                        playerManager.currentStation =
+                                          Station(name: "Easyrock",
+                                                  subtitle: "Easy listening hits",
+                                                  imageName: "Easyrock")
+                                    }
                             }
                             .padding(.horizontal)
                         }
                     }
-                    
-                    
-                    
                 }
                 .padding(.bottom, 140) // Space for bottom bar
             }
@@ -126,18 +261,18 @@ struct HomeView: View {
     }
 }
 
-// Station Card View
+// Station Card View (unchanged)
 struct StationCardView: View {
     var imageName: String
     var title: String
     var subtitle: String
     var listeners: String
     var color: Color
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             if let _ = UIImage(named: imageName) {
-                Image(imageName) // Custom image from assets
+                Image(imageName)
                     .resizable()
                     .scaledToFill()
                     .frame(width: 160, height: 100)
@@ -152,7 +287,7 @@ struct StationCardView: View {
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(10)
             }
-            
+
             Text(title)
                 .font(.headline)
             Text(subtitle)
@@ -166,11 +301,11 @@ struct StationCardView: View {
     }
 }
 
-// mini card
+// mini card (unchanged)
 struct MiniStationCard: View {
     var imageName: String
     var color: Color
-    
+
     var body: some View {
         Rectangle()
             .fill(color)
@@ -186,9 +321,10 @@ struct MiniStationCard: View {
     }
 }
 
-
-// Currently Playing Bar
+// Currently Playing Bar (now reads from PlayerManager)
 struct CurrentlyPlayingBar: View {
+    @EnvironmentObject var playerManager: PlayerManager
+
     var body: some View {
         HStack {
             Rectangle()
@@ -196,21 +332,31 @@ struct CurrentlyPlayingBar: View {
                 .frame(width: 50, height: 50)
                 .cornerRadius(8)
                 .overlay(
-                    Image(systemName: "music.note")
-                        .foregroundColor(.primary)
+                    Group {
+                        if let station = playerManager.currentStation,
+                           let uiImage = UIImage(named: station.imageName) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .clipped()
+                        } else {
+                            Image(systemName: "music.note")
+                                .foregroundColor(.primary)
+                        }
+                    }
                 )
-            
+
             VStack(alignment: .leading) {
-                Text("Now Playing: Wish 107.5")
+                Text(playerManager.currentStation?.name ?? "No Station Selected")
                     .font(.subheadline)
                     .foregroundColor(.primary)
-                Text("Your music dreams come alive")
+                Text(playerManager.currentStation?.subtitle ?? "")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
             Spacer()
-            
+
             Button(action: {}) {
                 Image(systemName: "play.fill")
                     .font(.title2)
@@ -222,10 +368,10 @@ struct CurrentlyPlayingBar: View {
     }
 }
 
-// Bottom Navigation Bar
+// Bottom Navigation Bar (unchanged)
 struct BottomNavBar: View {
     @Binding var selectedTab: Int
-    
+
     var body: some View {
         HStack {
             Spacer()
@@ -266,43 +412,43 @@ struct BottomNavBar: View {
 struct MainTabView: View {
     @State private var selectedTab = 0
     @State private var showPlayer = false   // for sheet
-    
+    @StateObject private var playerManager = PlayerManager()
+
     var body: some View {
         ZStack(alignment: .bottom) {
             // Screen Switching
             Group {
                 if selectedTab == 0 {
                     HomeView()
+                        .environmentObject(playerManager)
                 } else if selectedTab == 1 {
                     SearchView()
                 } else {
                     ProfileView()
                 }
             }
-            
+
             // Fixed Bottom Player + Navigation
             VStack(spacing: 0) {
                 Spacer()
-                
-                // Tap on bar opens sheet
+
                 CurrentlyPlayingBar()
+                    .environmentObject(playerManager)
                     .onTapGesture {
                         showPlayer.toggle()
                     }
-                
+
                 BottomNavBar(selectedTab: $selectedTab)
             }
         }
         .edgesIgnoringSafeArea(.bottom)
-        // sheet presentation
         .sheet(isPresented: $showPlayer) {
             PlayerView()
-                .presentationDetents([.medium, .large]) // drag to resize
+                .environmentObject(playerManager)
+                .presentationDetents([.medium, .large])
         }
     }
 }
-
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
@@ -312,8 +458,6 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 #Preview {
-    HomeView()
+    HomeView().environmentObject(PlayerManager())
 }
-
-
 
