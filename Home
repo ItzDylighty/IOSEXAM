@@ -8,26 +8,26 @@ struct HomeView: View {
             HStack {
                 Text("Home")
                     .font(.system(size: 28, weight: .bold))
-
+                
                 Spacer()
-
+                
                 Image(systemName: "person.circle")
                     .resizable()
                     .frame(width: 28, height: 28)
             }
             .padding(.horizontal)
             .padding(.top, 10)
-
+            
             // Scrollable Content
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-
+                    
                     // On Air Section
                     VStack(alignment: .leading, spacing: 12) {
                         Text("On Air")
                             .font(.headline)
                             .padding(.horizontal)
-
+                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
                                 StationCardView(imageName: "Wish",
@@ -35,19 +35,19 @@ struct HomeView: View {
                                                 subtitle: "dreams come alive",
                                                 listeners: "12,480",
                                                 color: .red)
-
+                                
                                 StationCardView(imageName: "Love",
                                                 title: "Love Radio",
                                                 subtitle: "Feel the love everyday!",
                                                 listeners: "8,320",
                                                 color: .pink)
-
+                                
                                 StationCardView(imageName: "Monster",
                                                 title: "Monster",
                                                 subtitle: "Top hits, non-stop",
                                                 listeners: "6,120",
                                                 color: .blue)
-
+                                
                                 StationCardView(imageName: "Yes",
                                                 title: "Yes FM",
                                                 subtitle: "All hits all day",
@@ -57,15 +57,15 @@ struct HomeView: View {
                             .padding(.horizontal)
                         }
                     }
-
+                    
                     // Recently Listen
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Text("Recently Listen")
                                 .font(.headline)
-
+                            
                             Spacer()
-
+                            
                             Button(action: {}) {
                                 Text(">")
                                     .font(.headline)
@@ -73,7 +73,7 @@ struct HomeView: View {
                             }
                         }
                         .padding(.horizontal)
-
+                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
                                 MiniStationCard(imageName: "Monster", color: .blue)
@@ -85,15 +85,15 @@ struct HomeView: View {
                             .padding(.horizontal)
                         }
                     }
-
+                    
                     // News Live
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Text("News Live")
                                 .font(.headline)
-
+                            
                             Spacer()
-
+                            
                             Button(action: {}) {
                                 Text(">")
                                     .font(.headline)
@@ -101,7 +101,7 @@ struct HomeView: View {
                             }
                         }
                         .padding(.horizontal)
-
+                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
                                 MiniStationCard(imageName: "Dzrm", color: .red)
@@ -113,15 +113,15 @@ struct HomeView: View {
                             .padding(.horizontal)
                         }
                     }
-
+                    
                     // Others
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Text("Others")
                                 .font(.headline)
-
+                            
                             Spacer()
-
+                            
                             Button(action: {}) {
                                 Text(">")
                                     .font(.headline)
@@ -129,7 +129,7 @@ struct HomeView: View {
                             }
                         }
                         .padding(.horizontal)
-
+                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
                                 MiniStationCard(imageName: "Wish", color: .red)
@@ -155,7 +155,7 @@ struct StationCardView: View {
     var subtitle: String
     var listeners: String
     var color: Color
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             if let _ = UIImage(named: imageName) {
@@ -174,14 +174,14 @@ struct StationCardView: View {
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(10)
             }
-
+            
             Text(title)
                 .font(.headline)
-
+            
             Text(subtitle)
                 .font(.caption)
                 .foregroundColor(.gray)
-
+            
             Text("Active Listeners: \(listeners)")
                 .font(.caption2)
                 .foregroundColor(.orange)
@@ -194,7 +194,7 @@ struct StationCardView: View {
 struct MiniStationCard: View {
     var imageName: String
     var color: Color
-
+    
     var body: some View {
         Rectangle()
             .fill(color)
@@ -222,7 +222,7 @@ struct CurrentlyPlayingBar: View {
                     Image(systemName: "music.note")
                         .foregroundColor(.primary)
                 )
-
+            
             VStack(alignment: .leading) {
                 Text("Now Playing: Wish 107.5")
                     .font(.subheadline)
@@ -231,9 +231,9 @@ struct CurrentlyPlayingBar: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-
+            
             Spacer()
-
+            
             Button(action: {}) {
                 Image(systemName: "play.fill")
                     .font(.title2)
@@ -248,11 +248,11 @@ struct CurrentlyPlayingBar: View {
 // Bottom Navigation Bar
 struct BottomNavBar: View {
     @Binding var selectedTab: Int
-
+    
     var body: some View {
         HStack {
             Spacer()
-
+            
             Button(action: { selectedTab = 0 }) {
                 VStack {
                     Image(systemName: "house.fill")
@@ -261,9 +261,9 @@ struct BottomNavBar: View {
                 }
                 .foregroundColor(selectedTab == 0 ? .blue : .secondary)
             }
-
+            
             Spacer()
-
+            
             Button(action: { selectedTab = 1 }) {
                 VStack {
                     Image(systemName: "magnifyingglass")
@@ -272,9 +272,9 @@ struct BottomNavBar: View {
                 }
                 .foregroundColor(selectedTab == 1 ? .blue : .secondary)
             }
-
+            
             Spacer()
-
+            
             Button(action: { selectedTab = 2 }) {
                 VStack {
                     Image(systemName: "person.fill")
@@ -283,7 +283,7 @@ struct BottomNavBar: View {
                 }
                 .foregroundColor(selectedTab == 2 ? .blue : .secondary)
             }
-
+            
             Spacer()
         }
         .padding(.vertical, 8)
@@ -295,7 +295,7 @@ struct BottomNavBar: View {
 struct MainTabView: View {
     @State private var selectedTab = 0
     @State private var showPlayer = false // for sheet
-
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             // Screen Switching
@@ -308,18 +308,19 @@ struct MainTabView: View {
                     ProfileView()
                 }
             }
-
+            
             // Fixed Bottom Player + Navigation
             VStack(spacing: 0) {
                 Spacer()
-
+                
                 // Tap on bar opens sheet
                 CurrentlyPlayingBar()
                     .onTapGesture { showPlayer.toggle() }
-
+                
                 BottomNavBar(selectedTab: $selectedTab)
             }
         }
+        .navigationBarBackButtonHidden(true)
         .edgesIgnoringSafeArea(.bottom)
         // Sheet presentation
         .sheet(isPresented: $showPlayer) {
