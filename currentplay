@@ -1,0 +1,66 @@
+import SwiftUI
+
+struct PlayerView: View {
+    @State private var volume: Double = 0.5
+    
+    var body: some View {
+        VStack(spacing: 30) {
+            // Album artwork
+            Rectangle()
+                .fill(Color.gray.opacity(0.3))
+                .frame(width: 300, height: 300)
+                .cornerRadius(12)
+                .overlay(
+                    Image(systemName: "music.note")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.primary.opacity(0.7))
+                        .frame(width: 80, height: 80)
+                )
+                .padding(.top, 40)
+            
+            // Track info
+            VStack(spacing: 8) {
+                Text("Wish 107.5")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                Text("Your music dreams come alive")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            
+            // Volume + controls
+            VStack(spacing: 20) {
+                HStack {
+                    Image(systemName: "speaker.fill")
+                    Slider(value: $volume, in: 0...1)
+                    Image(systemName: "speaker.wave.3.fill")
+                }
+                .foregroundColor(.secondary)
+                
+                HStack(spacing: 50) {
+                    Button(action: {}) {
+                        Image(systemName: "backward.fill")
+                            .font(.largeTitle)
+                    }
+                    Button(action: {}) {
+                        Image(systemName: "play.circle.fill")
+                            .font(.system(size: 60))
+                    }
+                    Button(action: {}) {
+                        Image(systemName: "forward.fill")
+                            .font(.largeTitle)
+                    }
+                }
+                .foregroundColor(.blue)
+            }
+            
+            Spacer()
+        }
+        .padding()
+    }
+}
+
+#Preview {
+    PlayerView()
+}
