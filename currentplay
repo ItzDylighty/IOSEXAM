@@ -1,8 +1,9 @@
 import SwiftUI
 
 struct PlayerView: View {
+    @EnvironmentObject var playerManager: PlayerManager
     @State private var volume: Double = 0.5
-    
+
     var body: some View {
         VStack(spacing: 30) {
             // Album artwork
@@ -11,24 +12,33 @@ struct PlayerView: View {
                 .frame(width: 300, height: 300)
                 .cornerRadius(12)
                 .overlay(
-                    Image(systemName: "music.note")
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(.primary.opacity(0.7))
-                        .frame(width: 80, height: 80)
+                    Group {
+                        if let station = playerManager.currentStation,
+                           let uiImage = UIImage(named: station.imageName) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFit()
+                        } else {
+                            Image(systemName: "music.note")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(.primary.opacity(0.7))
+                                .frame(width: 80, height: 80)
+                        }
+                    }
                 )
                 .padding(.top, 40)
-            
+
             // Track info
             VStack(spacing: 8) {
-                Text("Wish 107.5")
+                Text(playerManager.currentStation?.name ?? "No Station Selected")
                     .font(.title2)
                     .fontWeight(.bold)
-                Text("Your music dreams come alive")
+                Text(playerManager.currentStation?.subtitle ?? "")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
-            
+
             // Volume + controls
             VStack(spacing: 20) {
                 HStack {
@@ -37,7 +47,7 @@ struct PlayerView: View {
                     Image(systemName: "speaker.wave.3.fill")
                 }
                 .foregroundColor(.secondary)
-                
+
                 HStack(spacing: 50) {
                     Button(action: {}) {
                         Image(systemName: "backward.fill")
@@ -54,7 +64,7 @@ struct PlayerView: View {
                 }
                 .foregroundColor(.blue)
             }
-            
+
             Spacer()
         }
         .padding()
@@ -62,5 +72,6 @@ struct PlayerView: View {
 }
 
 #Preview {
-    PlayerView()
+    PlayerView().environmentObject(PlayerManager())
 }
+
