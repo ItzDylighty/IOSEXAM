@@ -1,124 +1,127 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @EnvironmentObject var appState: AppState
-    
     var body: some View {
         NavigationStack {
-            VStack {
-                ScrollView {
-                    VStack(spacing: 28) {
+            ScrollView {
+                VStack(spacing: 28) {
+                    
+                    // User Info
+                    VStack(spacing: 8) {
+                        Image(systemName: "person.circle.fill")
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                            .foregroundColor(.gray)
+                            .clipShape(Circle())
                         
-                        // User Info
-                        VStack(spacing: 8) {
-                            Image(systemName: "person.circle.fill")
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                                .foregroundColor(.gray)
-                                .clipShape(Circle())
-                            
-                            Text("Username")
-                                .font(.headline)
-                            
-                            Text("Email.com")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                        }
-                        .padding(.top, 20)
+                        Text("Username")
+                            .font(.headline)
                         
-                        // View Profile Button
-                        Button(action: {}) {
-                            Text("View Full Profile")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.black)
-                                .foregroundColor(.white)
-                                .cornerRadius(25)
-                                .padding(.horizontal)
-                        }
-                        
-                        Divider()
-                        
-                        // Switch Account
-                        HStack {
-                            Text("Switch Account")
-                            Spacer()
-                            Image(systemName: "chevron.down")
-                                .foregroundColor(.gray)
-                        }
-                        .padding(.horizontal)
-                        
-                        Divider()
-                        
-                        // Support Section
-                        VStack(alignment: .leading, spacing: 20) {
-                            Text("Support")
-                                .font(.headline)
-                            
-                            HStack {
-                                Text("App feedback")
-                                Spacer()
-                                Image(systemName: "arrow.up.right")
-                                    .foregroundColor(.gray)
-                            }
-                            
-                            HStack {
-                                Text("Help centre")
-                                Spacer()
-                                Image(systemName: "arrow.up.right")
-                                    .foregroundColor(.gray)
-                            }
-                        }
-                        .padding(.horizontal)
-                        
-                        Divider()
-                        
-                        // Preferences Section
-                        VStack(alignment: .leading, spacing: 20) {
-                            Text("Preferences")
-                                .font(.headline)
-                            
-                            HStack {
-                                Text("Language")
-                                Spacer()
-                                Text("English")
-                                    .foregroundColor(.gray)
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.gray)
-                            }
-                            
-                            HStack {
-                                Text("Notification")
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.gray)
-                            }
-                        }
-                        .padding(.horizontal)
-                        
-                        Spacer(minLength: 30)
-                        
-                        // Logout Button
-                        Button(action: {
-                            appState.isLoggedIn = false // 🔑 Reset to LoginView
-                        }) {
-                            Text("Log out")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.black)
-                                .foregroundColor(.white)
-                                .cornerRadius(25)
-                                .padding(.horizontal)
-                        }
-                        .padding(.bottom, 150)
+                        Text("Email.com")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
                     }
+                    .padding(.top, 20)
+                    
+                    // View Profile Button
+                    Button(action: {}) {
+                        Text("View Full Profile")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.black)
+                            .foregroundColor(.white)
+                            .cornerRadius(25)
+                            .padding(.horizontal)
+                    }
+                    
+                    Divider()
+                    
+                    // Switch Account
+                    HStack {
+                        Text("Switch Account")
+                        Spacer()
+                        Image(systemName: "chevron.down")
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.horizontal)
+                    
+                    Divider()
+                    
+                    // Support Section
+                    VStack(alignment: .leading, spacing: 20) {
+                        Text("Support")
+                            .font(.headline)
+                        
+                        HStack {
+                            Text("App feedback")
+                            Spacer()
+                            Image(systemName: "arrow.up.right")
+                                .foregroundColor(.gray)
+                        }
+                        
+                        HStack {
+                            Text("Help centre")
+                            Spacer()
+                            Image(systemName: "arrow.up.right")
+                                .foregroundColor(.gray)
+                        }
+                    }
+                    .padding(.horizontal)
+                    
+                    Divider()
+                    
+                    // Preferences Section
+                    VStack(alignment: .leading, spacing: 20) {
+                        Text("Preferences")
+                            .font(.headline)
+                        
+                        HStack {
+                            Text("Language")
+                            Spacer()
+                            Text("English")
+                                .foregroundColor(.gray)
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.gray)
+                        }
+                        
+                        HStack {
+                            Text("Notification")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.gray)
+                        }
+                    }
+                    .padding(.horizontal)
+                    
+                    Spacer(minLength: 30)
+                    
+                    // Logout Button
+                    Button(action: {
+                        // Replace root view with LoginView
+                        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                            if let window = scene.windows.first {
+                                window.rootViewController = UIHostingController(rootView: LoginView())
+                                window.makeKeyAndVisible()
+                            }
+                        }
+                    }) {
+                        Text("Log out")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.black)
+                            .foregroundColor(.white)
+                            .cornerRadius(25)
+                            .padding(.horizontal)
+                    }
+                    .padding(.bottom, 150)
                 }
             }
         }
     }
 }
+
 
 #Preview {
     ProfileView()
