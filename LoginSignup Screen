@@ -144,7 +144,7 @@ struct LoginView: View {
                 NavigationLink(destination: MainTabView(), isActive: $navigateToMain) {
                     EmptyView()
                 }
-                .hidden()
+                    .hidden()
             )
         }
     }
@@ -165,13 +165,13 @@ struct LoginView: View {
 // SignupView
 struct SignupView: View {
     @Environment(\.dismiss) private var dismiss
-
+    
     @State private var username: String = ""
     @State private var password: String = ""
     @State private var reEnterPassword: String = ""
-
+    
     @State private var showPasswordMismatchAlert = false
-
+    
     var body: some View {
         VStack(spacing: 16) {
             Text("Create your account")
