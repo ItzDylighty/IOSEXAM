@@ -1,6 +1,48 @@
 import SwiftUI
 
-//Home Screen
+class AppState: ObservableObject {
+    @Published var isLoggedIn: Bool = true
+}
+
+struct ContentView: View {
+    @StateObject private var appState = AppState()
+    
+    var body: some View {
+        Group {
+            if appState.isLoggedIn {
+                MainTabView()
+                    .environmentObject(appState)
+            } else {
+                LoginView()
+                    .environmentObject(appState)
+            }
+        }
+    }
+}
+
+struct LoginView: View {
+    @EnvironmentObject var appState: AppState
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Login Screen")
+                .font(.largeTitle)
+                .bold()
+            
+            Button("Log In") {
+                appState.isLoggedIn = true
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .padding(.horizontal, 40)
+        }
+        .navigationBarBackButtonHidden(true) // 🔑 Hide back navigation
+    }
+}
+
 struct HomeView: View {
     var body: some View {
         VStack(spacing: 0) {
@@ -90,7 +132,6 @@ struct HomeView: View {
                         }
                     }
                     
-                    
                     // Others
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
@@ -116,9 +157,6 @@ struct HomeView: View {
                             .padding(.horizontal)
                         }
                     }
-                    
-                    
-                    
                 }
                 .padding(.bottom, 140) // Space for bottom bar
             }
@@ -126,7 +164,55 @@ struct HomeView: View {
     }
 }
 
-// Station Card View
+
+struct ProfileView: View {
+    @EnvironmentObject var appState: AppState
+    
+    var body: some View {
+        NavigationStack {
+            VStack {
+                ScrollView {
+                    VStack(spacing: 28) {
+                        
+                        // User Info
+                        VStack(spacing: 8) {
+                            Image(systemName: "person.circle.fill")
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .foregroundColor(.gray)
+                                .clipShape(Circle())
+                            
+                            Text("Username")
+                                .font(.headline)
+                            
+                            Text("Email.com")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.top, 20)
+                        
+                        // Logout Button
+                        Button(action: {
+                            appState.isLoggedIn = false // 🔑 This logs out
+                        }) {
+                            Text("Log out")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.black)
+                                .foregroundColor(.white)
+                                .cornerRadius(25)
+                                .padding(.horizontal)
+                        }
+                        .padding(.bottom, 150)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 struct StationCardView: View {
     var imageName: String
     var title: String
@@ -137,7 +223,7 @@ struct StationCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             if let _ = UIImage(named: imageName) {
-                Image(imageName) // Custom image from assets
+                Image(imageName)
                     .resizable()
                     .scaledToFill()
                     .frame(width: 160, height: 100)
@@ -166,7 +252,7 @@ struct StationCardView: View {
     }
 }
 
-// mini card
+
 struct MiniStationCard: View {
     var imageName: String
     var color: Color
@@ -186,8 +272,6 @@ struct MiniStationCard: View {
     }
 }
 
-
-// Currently Playing Bar
 struct CurrentlyPlayingBar: View {
     var body: some View {
         HStack {
@@ -222,7 +306,7 @@ struct CurrentlyPlayingBar: View {
     }
 }
 
-// Bottom Navigation Bar
+
 struct BottomNavBar: View {
     @Binding var selectedTab: Int
     
@@ -262,24 +346,22 @@ struct BottomNavBar: View {
     }
 }
 
-// Main View
+
 struct MainTabView: View {
     @State private var selectedTab = 0
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            // Screen Switching
             Group {
                 if selectedTab == 0 {
                     HomeView()
                 } else if selectedTab == 1 {
-                    SearchView()
+                    Text("Search View") // placeholder
                 } else {
                     ProfileView()
                 }
             }
             
-            // Fixed Bottom Player  Navigation
             VStack(spacing: 0) {
                 Spacer()
                 CurrentlyPlayingBar()
@@ -293,12 +375,9 @@ struct MainTabView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        MainTabView()
+        ContentView()
             .preferredColorScheme(.light)
     }
 }
 
-#Preview {
-    HomeView()
-}
 
