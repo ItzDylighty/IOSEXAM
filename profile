@@ -1,11 +1,15 @@
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 struct ProfileView: View {
+    @EnvironmentObject var appState: AppState
+    @Environment(\.modelContext) private var context
+    @Query private var users: [User]
+
     @State private var username: String = ""
     @State private var email: String = ""
-    @EnvironmentObject var appState: AppState
-    @State private var navigateToEdit = false
+    @State private var profileImageData: Data? = nil
 
     var body: some View {
         NavigationStack {
@@ -14,23 +18,31 @@ struct ProfileView: View {
 
                     // User Info
                     VStack(spacing: 8) {
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .frame(width: 60, height: 60)
-                            .foregroundColor(.gray)
-                            .clipShape(Circle())
+                        if let data = profileImageData,
+                           let uiImage = UIImage(data: data) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .clipShape(Circle())
+                        } else {
+                            Image(systemName: "person.circle.fill")
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .foregroundColor(.gray)
+                                .clipShape(Circle())
+                        }
 
                         Text(username.isEmpty ? "Guest" : username)
                             .font(.headline)
-
                         Text(email.isEmpty ? "Email not set" : email)
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
                     .padding(.top, 20)
 
-                    // View / Edit Profile Button
-                    NavigationLink(destination: EditProfileView(username: $username, email: $email)) {
+                    NavigationLink(destination: EditProfileView(username: $username,
+                                                               email: $email,
+                                                               profileImageData: $profileImageData)) {
                         Text("Edit Profile")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
@@ -43,7 +55,6 @@ struct ProfileView: View {
 
                     Divider()
 
-                    // Switch Account
                     HStack {
                         Text("Switch Account")
                         Spacer()
@@ -54,18 +65,15 @@ struct ProfileView: View {
 
                     Divider()
 
-                    // Support Section
                     VStack(alignment: .leading, spacing: 20) {
                         Text("Support")
                             .font(.headline)
-
                         HStack {
                             Text("App feedback")
                             Spacer()
                             Image(systemName: "arrow.up.right")
                                 .foregroundColor(.gray)
                         }
-
                         HStack {
                             Text("Help centre")
                             Spacer()
@@ -77,11 +85,9 @@ struct ProfileView: View {
 
                     Divider()
 
-                    // Preferences Section
                     VStack(alignment: .leading, spacing: 20) {
                         Text("Preferences")
                             .font(.headline)
-
                         HStack {
                             Text("Language")
                             Spacer()
@@ -90,7 +96,6 @@ struct ProfileView: View {
                             Image(systemName: "chevron.right")
                                 .foregroundColor(.gray)
                         }
-
                         HStack {
                             Text("Notification")
                             Spacer()
@@ -102,11 +107,7 @@ struct ProfileView: View {
 
                     Spacer(minLength: 30)
 
-                    // Logout Button
-                    Button(action: {
-
-                        appState.isLoggedIn = false
-                    }) {
+                    Button(action: { appState.isLoggedIn = false }) {
                         Text("Log out")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
@@ -120,8 +121,12 @@ struct ProfileView: View {
                 }
             }
             .onAppear {
-                username = UserDefaults.standard.string(forKey: "savedUsername") ?? ""
-                email = UserDefaults.standard.string(forKey: "savedEmail") ?? ""
+                if let current = UserDefaults.standard.string(forKey: "currentUsername"),
+                   let user = users.first(where: { $0.username == current }) {
+                    username = user.username
+                    email = user.email ?? ""
+                    profileImageData = user.profileImage
+                }
             }
         }
     }
@@ -130,12 +135,16 @@ struct ProfileView: View {
 struct EditProfileView: View {
     @Binding var username: String
     @Binding var email: String
+    @Binding var profileImageData: Data?
+
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
+    @Query private var users: [User]
 
     @State private var newUsername: String = ""
     @State private var newPassword: String = ""
     @State private var newEmail: String = ""
-
-    @Environment(\.dismiss) private var dismiss
+    @State private var selectedItem: PhotosPickerItem? = nil
 
     var body: some View {
         VStack(spacing: 20) {
@@ -143,6 +152,20 @@ struct EditProfileView: View {
                 .font(.largeTitle)
                 .bold()
                 .padding(.top)
+
+            if let data = profileImageData,
+               let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .frame(width: 60, height: 60)
+                    .clipShape(Circle())
+            } else {
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .frame(width: 60, height: 60)
+                    .foregroundColor(.gray)
+                    .clipShape(Circle())
+            }
 
             TextField("Username", text: $newUsername)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -156,18 +179,44 @@ struct EditProfileView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal)
 
+            PhotosPicker(selection: $selectedItem, matching: .images, photoLibrary: .shared()) {
+                Text("Change Profile Image")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray.opacity(0.3))
+                    .foregroundColor(.black)
+                    .cornerRadius(25)
+                    .padding(.horizontal)
+            }
+            .onChange(of: selectedItem) { newValue in
+                guard let newValue else { return }
+                Task {
+                    if let data = try? await newValue.loadTransferable(type: Data.self) {
+                        profileImageData = data
+                    }
+                }
+            }
+
             Button(action: {
-                if !newUsername.isEmpty {
-                    username = newUsername
-                    UserDefaults.standard.set(newUsername, forKey: "savedUsername")
+                guard let currentUsername = UserDefaults.standard.string(forKey: "currentUsername"),
+                      let user = users.first(where: { $0.username == currentUsername }) else { return }
+
+                if !newUsername.isEmpty { user.username = newUsername }
+                if !newPassword.isEmpty { user.password = newPassword }
+                if !newEmail.isEmpty { user.email = newEmail }
+                if let img = profileImageData {
+                    user.profileImage = img
+                    // Save image to UserDefaults so HomeView/SearchView can access it
+                    UserDefaults.standard.set(img, forKey: "savedProfileImage")
                 }
-                if !newPassword.isEmpty {
-                    UserDefaults.standard.set(newPassword, forKey: "savedPassword")
-                }
-                if !newEmail.isEmpty {
-                    email = newEmail
-                    UserDefaults.standard.set(newEmail, forKey: "savedEmail")
-                }
+
+                try? context.save()
+
+                username = user.username
+                email = user.email ?? ""
+                UserDefaults.standard.set(user.username, forKey: "currentUsername")
+
                 dismiss()
             }) {
                 Text("Save Changes")
@@ -197,12 +246,6 @@ struct EditProfileView: View {
             newUsername = username
             newEmail = email
         }
-    }
-}
-
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView().environmentObject(AppState())
     }
 }
 
