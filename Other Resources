@@ -1,0 +1,70 @@
+// User.swift
+import SwiftData
+
+@Model
+final class User {
+    @Attribute(.unique) var username: String
+    var password: String
+    var email: String?
+
+    init(username: String, password: String, email: String? = nil) {
+        self.username = username
+        self.password = password
+        self.email = email
+    }
+}
+
+
+//MyApp
+
+import SwiftUI
+import SwiftData
+
+@main
+struct RadioApp: App {
+    @StateObject private var appState = AppState()
+
+    var body: some Scene {
+        WindowGroup {
+            RootView()
+                .environmentObject(appState)
+        }
+        .modelContainer(for: User.self)
+    }
+}
+
+
+//Root.swift
+
+import SwiftUI
+
+struct RootView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        Group {
+            if appState.isLoggedIn {
+                MainTabView()
+            } else {
+                LoginView()
+            }
+        }
+    }
+}
+
+
+
+// AppState.swift
+import Foundation
+import Combine
+
+final class AppState: ObservableObject {
+    @Published var isLoggedIn: Bool {
+        didSet { UserDefaults.standard.set(isLoggedIn, forKey: "isLoggedIn") }
+    }
+
+    init() {
+        self.isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
+    }
+}
+
