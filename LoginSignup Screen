@@ -1,18 +1,18 @@
 import SwiftUI
+import SwiftData
 
-// LoginView
 struct LoginView: View {
+    @EnvironmentObject var appState: AppState
+
     @State private var username: String = ""
     @State private var password: String = ""
     @State private var isShowingSignup = false
-    @State private var showLoginSuccessAlert = false   // <-- alert only
-    @State private var navigateToMain = false          // <-- navigation only
+    @State private var showLoginSuccessAlert = false
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 16) {
-                // Logo
                 VStack(spacing: 4) {
                     Image(systemName: "radio.fill")
                         .resizable()
@@ -21,20 +21,17 @@ struct LoginView: View {
                         .foregroundColor(.black)
                 }
                 .padding(.top, 50)
-                
-                // Title
+
                 VStack(spacing: 4) {
                     Text("Log in to your account")
                         .font(.headline)
-                    
                     Text("Enter your email to sign in for this app")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
                 .multilineTextAlignment(.center)
                 .padding(.top, 8)
-                
-                // Input Fields
+
                 VStack(spacing: 12) {
                     TextField("Username", text: $username)
                         .padding()
@@ -42,18 +39,15 @@ struct LoginView: View {
                         .cornerRadius(10)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
-                    
+
                     SecureField("Password", text: $password)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
                 }
                 .padding(.top, 12)
-                
-                // Login Button
-                Button(action: {
-                    loginUser()
-                }) {
+
+                Button(action: { loginUser() }) {
                     Text("Log in")
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -62,22 +56,18 @@ struct LoginView: View {
                         .cornerRadius(10)
                 }
                 .padding(.top, 8)
-                
-                // Create Account - navigate to SignupView
+
                 HStack(spacing: 4) {
                     Text("Don’t have an account?")
                         .foregroundColor(.gray)
-                    Button(action: {
-                        isShowingSignup = true
-                    }) {
+                    Button(action: { isShowingSignup = true }) {
                         Text("Create Here")
                             .foregroundColor(.blue)
                     }
                 }
                 .font(.footnote)
                 .padding(.top, 6)
-                
-                // Divider with OR
+
                 HStack {
                     Rectangle()
                         .frame(height: 1)
@@ -89,8 +79,7 @@ struct LoginView: View {
                         .foregroundColor(.gray.opacity(0.4))
                 }
                 .padding(.vertical, 12)
-                
-                // Google Button
+
                 Button(action: { print("Google tapped") }) {
                     HStack {
                         Image(systemName: "globe")
@@ -102,8 +91,7 @@ struct LoginView: View {
                     .background(Color(.systemGray5))
                     .cornerRadius(10)
                 }
-                
-                // Apple Button
+
                 Button(action: { print("Apple tapped") }) {
                     HStack {
                         Image(systemName: "applelogo")
@@ -115,10 +103,9 @@ struct LoginView: View {
                     .background(Color(.systemGray5))
                     .cornerRadius(10)
                 }
-                
+
                 Spacer()
-                
-                // Terms
+
                 Text("By clicking continue, you agree to our Terms of Service and Privacy Policy")
                     .font(.footnote)
                     .foregroundColor(.gray)
@@ -131,73 +118,60 @@ struct LoginView: View {
             .navigationDestination(isPresented: $isShowingSignup) {
                 SignupView()
             }
-            // ✅ Separate alert state
             .alert("Login Successful", isPresented: $showLoginSuccessAlert) {
-                Button("OK") {
-                    navigateToMain = true      // trigger navigation after alert
-                }
+                Button("OK") { }
             } message: {
                 Text("You have logged in successfully!")
             }
-            // ✅ Separate navigation trigger
-            .background(
-                NavigationLink(destination: MainTabView(), isActive: $navigateToMain) {
-                    EmptyView()
-                }
-                    .hidden()
-            )
         }
     }
-    
-    // Function to handle login
+
+    // isLoggedIn set immediately after successful check
     private func loginUser() {
         let savedUsername = UserDefaults.standard.string(forKey: "savedUsername")
         let savedPassword = UserDefaults.standard.string(forKey: "savedPassword")
-        
         if username == savedUsername && password == savedPassword {
-            showLoginSuccessAlert = true   // show alert only
+            appState.isLoggedIn = true      // <- key change: use shared AppState
+            showLoginSuccessAlert = true
         } else {
             print("Login failed!")
         }
     }
 }
 
-// SignupView
 struct SignupView: View {
     @Environment(\.dismiss) private var dismiss
-    
     @State private var username: String = ""
     @State private var password: String = ""
     @State private var reEnterPassword: String = ""
-    
     @State private var showPasswordMismatchAlert = false
-    
+
     var body: some View {
         VStack(spacing: 16) {
             Text("Create your account")
                 .font(.largeTitle)
                 .bold()
                 .padding(.top, 50)
-            
+
             VStack(spacing: 12) {
                 TextField("Username", text: $username)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
                     .textInputAutocapitalization(.never)
-                
+
                 SecureField("Password", text: $password)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
-                
+
                 SecureField("Re-Enter Password", text: $reEnterPassword)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
             }
             .padding(.top, 20)
-            
+
             Button(action: {
                 if password == reEnterPassword && !password.isEmpty {
                     UserDefaults.standard.set(username, forKey: "savedUsername")
@@ -219,7 +193,7 @@ struct SignupView: View {
             .alert("Passwords do not match", isPresented: $showPasswordMismatchAlert) {
                 Button("OK", role: .cancel) { }
             }
-            
+
             Spacer()
         }
         .padding(.horizontal, 20)
@@ -227,7 +201,12 @@ struct SignupView: View {
     }
 }
 
-// Preview
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginView().environmentObject(AppState())
+    }
+}
+
 #Preview {
     LoginView()
 }
