@@ -1,16 +1,19 @@
 // User.swift
 import SwiftData
+import Foundation
 
 @Model
 final class User {
     @Attribute(.unique) var username: String
     var password: String
     var email: String?
+    var profileImage: Data?        
 
-    init(username: String, password: String, email: String? = nil) {
+    init(username: String, password: String, email: String? = nil, profileImage: Data? = nil) {
         self.username = username
         self.password = password
         self.email = email
+        self.profileImage = profileImage
     }
 }
 
