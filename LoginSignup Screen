@@ -3,12 +3,14 @@ import SwiftData
 
 struct LoginView: View {
     @EnvironmentObject var appState: AppState
+    @Environment(\.modelContext) private var context
+    @Query private var users: [User]
 
     @State private var username: String = ""
     @State private var password: String = ""
     @State private var isShowingSignup = false
     @State private var showLoginSuccessAlert = false
-    @Environment(\.dismiss) private var dismiss
+    @State private var showLoginErrorAlert = false
 
     var body: some View {
         NavigationStack {
@@ -47,7 +49,7 @@ struct LoginView: View {
                 }
                 .padding(.top, 12)
 
-                Button(action: { loginUser() }) {
+                Button(action: loginUser) {
                     Text("Log in")
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -123,28 +125,37 @@ struct LoginView: View {
             } message: {
                 Text("You have logged in successfully!")
             }
+            .alert("Login Failed", isPresented: $showLoginErrorAlert) {
+                Button("OK") { }
+            } message: {
+                Text("Invalid username or password.")
+            }
         }
     }
 
-    // isLoggedIn set immediately after successful check
     private func loginUser() {
-        let savedUsername = UserDefaults.standard.string(forKey: "savedUsername")
-        let savedPassword = UserDefaults.standard.string(forKey: "savedPassword")
-        if username == savedUsername && password == savedPassword {
-            appState.isLoggedIn = true      // <- key change: use shared AppState
+        // check against SwiftData users
+        if let user = users.first(where: { $0.username == username && $0.password == password }) {
+            // remember which user is logged in
+            UserDefaults.standard.set(user.username, forKey: "currentUsername")
+            appState.isLoggedIn = true
             showLoginSuccessAlert = true
         } else {
-            print("Login failed!")
+            showLoginErrorAlert = true
         }
     }
 }
 
 struct SignupView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
+    @Query private var users: [User]
+
     @State private var username: String = ""
     @State private var password: String = ""
     @State private var reEnterPassword: String = ""
     @State private var showPasswordMismatchAlert = false
+    @State private var showUserExistsAlert = false
 
     var body: some View {
         VStack(spacing: 16) {
@@ -172,16 +183,7 @@ struct SignupView: View {
             }
             .padding(.top, 20)
 
-            Button(action: {
-                if password == reEnterPassword && !password.isEmpty {
-                    UserDefaults.standard.set(username, forKey: "savedUsername")
-                    UserDefaults.standard.set(password, forKey: "savedPassword")
-                    dismiss()
-                    print("Account Created - Username: \(username)")
-                } else {
-                    showPasswordMismatchAlert = true
-                }
-            }) {
+            Button(action: createAccount) {
                 Text("Create")
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -193,11 +195,31 @@ struct SignupView: View {
             .alert("Passwords do not match", isPresented: $showPasswordMismatchAlert) {
                 Button("OK", role: .cancel) { }
             }
+            .alert("Username already exists", isPresented: $showUserExistsAlert) {
+                Button("OK", role: .cancel) { }
+            }
 
             Spacer()
         }
         .padding(.horizontal, 20)
         .navigationBarBackButtonHidden(true)
+    }
+
+    private func createAccount() {
+        guard password == reEnterPassword, !password.isEmpty else {
+            showPasswordMismatchAlert = true
+            return
+        }
+        // prevent duplicate usernames
+        if users.contains(where: { $0.username == username }) {
+            showUserExistsAlert = true
+            return
+        }
+
+        let newUser = User(username: username, password: password)
+        context.insert(newUser)
+        try? context.save()
+        dismiss()
     }
 }
 
@@ -206,6 +228,7 @@ struct LoginView_Previews: PreviewProvider {
         LoginView().environmentObject(AppState())
     }
 }
+
 
 #Preview {
     LoginView()
