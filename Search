@@ -21,7 +21,6 @@ struct SearchView: View {
         Station(name: "Barangay LS 97.1", image: "Barangay"),
         Station(name: "Home Radio", image: "Home"),
         Station(name: "Energy FM", image: "Energy"),
-        Station(name: "DWLS FM", image: "Dwls"),
         Station(name: "Brigada News FM", image: "Brigada"),
         Station(name: "Radyo Natin", image: "RadyoNatin")
     ]
@@ -129,3 +128,4 @@ struct SearchView: View {
 #Preview {
     SearchView()
 }
+
