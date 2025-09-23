@@ -9,6 +9,10 @@ struct Station: Identifiable {
 struct SearchView: View {
     @State private var searchText = ""
 
+    // Load the saved profile image from UserDefaults
+    @State private var profileImageData: Data? =
+        UserDefaults.standard.data(forKey: "savedProfileImage")
+
     let stations = [
         Station(name: "DZRM 612", image: "Dzrm"),
         Station(name: "Monster FM", image: "Monster"),
@@ -24,7 +28,7 @@ struct SearchView: View {
         Station(name: "Brigada News FM", image: "Brigada"),
         Station(name: "Radyo Natin", image: "RadyoNatin")
     ]
-    
+
     var filteredStations: [Station] {
         if searchText.isEmpty {
             return stations
@@ -32,23 +36,32 @@ struct SearchView: View {
             return stations.filter { $0.name.lowercased().contains(searchText.lowercased()) }
         }
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Fixed Header
             HStack {
                 Text("Search")
                     .font(.system(size: 28, weight: .bold))
-                
+
                 Spacer()
-                
-                Image(systemName: "person.circle")
-                    .resizable()
-                    .frame(width: 28, height: 28)
+
+                // Show saved profile photo if available, else default icon
+                if let data = profileImageData,
+                   let uiImage = UIImage(data: data) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .frame(width: 28, height: 28)
+                        .clipShape(Circle())
+                } else {
+                    Image(systemName: "person.circle")
+                        .resizable()
+                        .frame(width: 28, height: 28)
+                }
             }
             .padding(.horizontal)
             .padding(.top, 10)
-            
+
             // Search Bar
             HStack {
                 Image(systemName: "magnifyingglass")
@@ -59,11 +72,11 @@ struct SearchView: View {
             .background(Color(.systemGray6))
             .cornerRadius(10)
             .padding(.horizontal)
-            
+
             // Main Scroll Area
             ScrollView(.vertical, showsIndicators: true) {
                 VStack(alignment: .leading, spacing: 20) {
-                    
+
                     if filteredStations.isEmpty {
                         Text("Station Not Found")
                             .font(.headline)
@@ -74,7 +87,7 @@ struct SearchView: View {
                         Text("Featured Stations")
                             .font(.headline)
                             .padding(.horizontal)
-                        
+
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
                                 ForEach(filteredStations) { station in
@@ -84,7 +97,7 @@ struct SearchView: View {
                                             .aspectRatio(contentMode: .fill)
                                             .frame(width: 120, height: 120)
                                             .cornerRadius(12)
-                                        
+
                                         Text(station.name)
                                             .font(.caption)
                                             .foregroundColor(.primary)
@@ -93,12 +106,12 @@ struct SearchView: View {
                             }
                             .padding(.horizontal)
                         }
-                        
+
                         // All Stations
                         Text("All Stations")
                             .font(.headline)
                             .padding(.horizontal)
-                        
+
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
                             ForEach(filteredStations) { station in
                                 VStack {
@@ -107,7 +120,7 @@ struct SearchView: View {
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 150, height: 150)
                                         .cornerRadius(8)
-                                    
+
                                     Text(station.name)
                                         .font(.caption)
                                         .foregroundColor(.primary)
@@ -119,8 +132,11 @@ struct SearchView: View {
                 }
                 .padding(.vertical)
             }
-            
+
             Spacer()
+        }
+        .onAppear {
+            profileImageData = UserDefaults.standard.data(forKey: "savedProfileImage")
         }
     }
 }
@@ -128,4 +144,5 @@ struct SearchView: View {
 #Preview {
     SearchView()
 }
+
 
