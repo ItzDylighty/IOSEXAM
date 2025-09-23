@@ -3,18 +3,30 @@ import SwiftData
 
 // Home Screen
 struct HomeView: View {
+    @Environment(\.modelContext) private var context
+    // read the saved profile image from UserDefaults
+    @State private var profileImageData: Data? = UserDefaults.standard.data(forKey: "savedProfileImage")
+
     var body: some View {
         VStack(spacing: 0) {
+
             //Header
             HStack {
                 Text("Home")
                     .font(.system(size: 28, weight: .bold))
-
                 Spacer()
 
-                Image(systemName: "person.circle")
-                    .resizable()
-                    .frame(width: 28, height: 28)
+                // Show uploaded profile image if available
+                if let data = profileImageData, let uiImage = UIImage(data: data) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .frame(width: 28, height: 28)
+                        .clipShape(Circle())
+                } else {
+                    Image(systemName: "person.circle")
+                        .resizable()
+                        .frame(width: 28, height: 28)
+                }
             }
             .padding(.horizontal)
             .padding(.top, 10)
@@ -31,29 +43,10 @@ struct HomeView: View {
 
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
-                                StationCardView(imageName: "Wish",
-                                                title: "Wish 107.5",
-                                                subtitle: "dreams come alive",
-                                                listeners: "12,480",
-                                                color: .red)
-
-                                StationCardView(imageName: "Love",
-                                                title: "Love Radio",
-                                                subtitle: "Feel the love everyday!",
-                                                listeners: "8,320",
-                                                color: .pink)
-
-                                StationCardView(imageName: "Monster",
-                                                title: "Monster",
-                                                subtitle: "Top hits, non-stop",
-                                                listeners: "6,120",
-                                                color: .blue)
-
-                                StationCardView(imageName: "Yes",
-                                                title: "Yes FM",
-                                                subtitle: "All hits all day",
-                                                listeners: "4,500",
-                                                color: .green)
+                                StationCardView(imageName: "Wish", title: "Wish 107.5", subtitle: "dreams come alive", listeners: "12,480", color: .red)
+                                StationCardView(imageName: "Love", title: "Love Radio", subtitle: "Feel the love everyday!", listeners: "8,320", color: .pink)
+                                StationCardView(imageName: "Monster", title: "Monster", subtitle: "Top hits, non-stop", listeners: "6,120", color: .blue)
+                                StationCardView(imageName: "Yes", title: "Yes FM", subtitle: "All hits all day", listeners: "4,500", color: .green)
                             }
                             .padding(.horizontal)
                         }
@@ -64,9 +57,7 @@ struct HomeView: View {
                         HStack {
                             Text("Recently Listen")
                                 .font(.headline)
-
                             Spacer()
-
                             Button(action: {}) {
                                 Text(">")
                                     .font(.headline)
@@ -92,9 +83,7 @@ struct HomeView: View {
                         HStack {
                             Text("News Live")
                                 .font(.headline)
-
                             Spacer()
-
                             Button(action: {}) {
                                 Text(">")
                                     .font(.headline)
@@ -120,9 +109,7 @@ struct HomeView: View {
                         HStack {
                             Text("Others")
                                 .font(.headline)
-
                             Spacer()
-
                             Button(action: {}) {
                                 Text(">")
                                     .font(.headline)
@@ -145,6 +132,10 @@ struct HomeView: View {
                 }
                 .padding(.bottom, 140) // Space for bottom bar
             }
+        }
+        // Refresh image every time HomeView appears
+        .onAppear {
+            profileImageData = UserDefaults.standard.data(forKey: "savedProfileImage")
         }
     }
 }
@@ -175,14 +166,11 @@ struct StationCardView: View {
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(10)
             }
-
             Text(title)
                 .font(.headline)
-
             Text(subtitle)
                 .font(.caption)
                 .foregroundColor(.gray)
-
             Text("Active Listeners: \(listeners)")
                 .font(.caption2)
                 .foregroundColor(.orange)
@@ -223,7 +211,6 @@ struct CurrentlyPlayingBar: View {
                     Image(systemName: "music.note")
                         .foregroundColor(.primary)
                 )
-
             VStack(alignment: .leading) {
                 Text("Now Playing: Wish 107.5")
                     .font(.subheadline)
@@ -232,9 +219,7 @@ struct CurrentlyPlayingBar: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-
             Spacer()
-
             Button(action: {}) {
                 Image(systemName: "play.fill")
                     .font(.title2)
@@ -249,42 +234,32 @@ struct CurrentlyPlayingBar: View {
 // Bottom Navigation Bar
 struct BottomNavBar: View {
     @Binding var selectedTab: Int
-
     var body: some View {
         HStack {
             Spacer()
-
             Button(action: { selectedTab = 0 }) {
                 VStack {
                     Image(systemName: "house.fill")
-                    Text("Home")
-                        .font(.caption2)
+                    Text("Home").font(.caption2)
                 }
                 .foregroundColor(selectedTab == 0 ? .blue : .secondary)
             }
-
             Spacer()
-
             Button(action: { selectedTab = 1 }) {
                 VStack {
                     Image(systemName: "magnifyingglass")
-                    Text("Search")
-                        .font(.caption2)
+                    Text("Search").font(.caption2)
                 }
                 .foregroundColor(selectedTab == 1 ? .blue : .secondary)
             }
-
             Spacer()
-
             Button(action: { selectedTab = 2 }) {
                 VStack {
                     Image(systemName: "person.fill")
-                    Text("Profile")
-                        .font(.caption2)
+                    Text("Profile").font(.caption2)
                 }
                 .foregroundColor(selectedTab == 2 ? .blue : .secondary)
             }
-
             Spacer()
         }
         .padding(.vertical, 8)
@@ -299,6 +274,7 @@ struct MainTabView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
+
             // Screen Switching
             Group {
                 if selectedTab == 0 {
@@ -313,11 +289,9 @@ struct MainTabView: View {
             // Fixed Bottom Player + Navigation
             VStack(spacing: 0) {
                 Spacer()
-
                 // Tap on bar opens sheet
                 CurrentlyPlayingBar()
                     .onTapGesture { showPlayer.toggle() }
-
                 BottomNavBar(selectedTab: $selectedTab)
             }
         }
@@ -340,7 +314,7 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-
 #Preview {
     HomeView()
 }
+
