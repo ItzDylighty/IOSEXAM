@@ -202,7 +202,17 @@ struct SignupView: View {
             Spacer()
         }
         .padding(.horizontal, 20)
-        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: Button(action: {
+            dismiss()
+        }) {
+            HStack {
+                Image(systemName: "chevron.left")
+                    .foregroundColor(.black)
+                Text("Back")
+                    .foregroundColor(.black)
+            }
+        })
+        .navigationBarBackButtonHidden(true) // Hides the default back button
     }
 
     private func createAccount() {
@@ -228,7 +238,6 @@ struct LoginView_Previews: PreviewProvider {
         LoginView().environmentObject(AppState())
     }
 }
-
 
 #Preview {
     LoginView()
